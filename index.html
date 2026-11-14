@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="mk" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b1120">
+  <title>Авијакт Мурли - Практики и Календар</title>
+  <link rel="manifest" href="manifest.json">
+  <style>
+    :root[data-theme="light"] {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --card-alt: #f1f5f9;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --primary: #d97706;
+      --primary-bg: #fffbeb;
+      --success: #059669;
+      --danger: #dc2626;
+      --shadow: 0 4px 15px rgba(0,0,0,0.06);
+    }
+    :root[data-theme="dark"] {
+      --bg: #0b1120;
+      --card: #1e293b;
+      --card-alt: #0f172a;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --border: #334155;
+      --primary: #f59e0b;
+      --primary-bg: rgba(245, 158, 11, 0.14);
+      --success: #10b981;
+      --danger: #ef4444;
+      --shadow: 0 6px 20px rgba(0,0,0,0.4);
+    }
+
+    * { box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+    body { background: var(--bg); color: var(--text); margin: 0; padding: 14px; transition: background 0.25s, color 0.25s; }
+    .container { max-width: 1180px; margin: 0 auto; }
+
+    .header {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 14px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow);
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .brand { display: flex; align-items: center; gap: 14px; }
+    .shiv-baba-logo {
+      width: 48px;
+      height: 48px;
+      flex-shrink: 0;
+      filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.6));
+    }
+    .brand-title { font-size: 19px; font-weight: 700; margin: 0; color: var(--primary); }
+    .brand-sub { font-size: 12.5px; color: var(--muted); margin: 2px 0 0 0; }
+
+    .controls { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .btn {
+      padding: 8px 14px;
+      border-radius: 9px;
+      border: 1px solid var(--border);
+      background: var(--card-alt);
+      color: var(--text);
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .btn:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-primary { background: var(--primary); color: #000; border-color: var(--primary); font-weight: 700; }
+    .btn-success { background: var(--success); color: #fff; border-color: var(--success); }
+    .btn-danger { background: var(--danger); color: #fff; border-color: var(--danger); }
+    .btn-sm { padding: 5px 10px; font-size: 12px; border-radius: 6px; }
+    .btn.active { background: var(--primary); color: #000; border-color: var(--primary); }
+
+    .nav-tabs { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
+    .nav-tab {
+      padding: 10px 18px;
+      border-radius: 12px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .nav-tab.active {
+      background: var(--primary-bg);
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .tasks-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; }
+    .task-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .task-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 12px; color: var(--muted); }
+    .murli-badge { background: var(--primary-bg); color: var(--primary); padding: 3px 10px; border-radius: 99px; font-weight: 700; }
+    .task-title { font-size: 17px; font-weight: 700; margin: 0 0 10px 0; color: var(--text); }
+    .task-body { font-size: 14px; line-height: 1.65; color: var(--text); white-space: pre-line; margin-bottom: 16px; }
+    .task-footer { border-top: 1px solid var(--border); padding-top: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+
+    .panel-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; box-shadow: var(--shadow); margin-bottom: 18px; }
+    label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 13.5px; color: var(--muted); }
+    input[type="text"], input[type="number"], textarea {
+      width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px;
+      background: var(--card-alt); color: var(--text); font-size: 14px; margin-bottom: 12px; line-height: 1.5;
+    }
+    .workspace-grid { display: grid; grid-template-columns: 6fr 6fr; gap: 20px; align-items: start; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media (max-width: 920px) { .workspace-grid, .grid-2 { grid-template-columns: 1fr; } }
+
+    .murli-reader { background: var(--card-alt); border: 1px solid var(--border); border-radius: 10px; padding: 14px; max-height: 740px; overflow-y: auto; }
+    .para-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 14px; margin-bottom: 12px; font-size: 14px; line-height: 1.65; }
+    .para-card.ai-picked { border-left: 4px solid var(--primary); background: var(--primary-bg); }
+    .para-header { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 12px; font-weight: 700; color: var(--muted); }
+
+    .task-pills { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+    .task-pill { padding: 6px 12px; border-radius: 99px; font-size: 12.5px; font-weight: 600; border: 1px solid var(--border); background: var(--card-alt); color: var(--text); cursor: pointer; }
+    .task-pill.active { background: var(--primary); color: #000; border-color: var(--primary); }
+    .task-pill.saved { border-color: var(--success); color: var(--success); }
+
+    .hidden { display: none !important; }
+
+    #floating-selection-menu {
+      position: fixed; z-index: 9999; background: #0f172a; color: #fff;
+      padding: 6px 8px; border-radius: 8px; border: 1px solid var(--primary);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.5); display: flex; gap: 6px;
+    }
+    #floating-selection-menu button {
+      background: #1e293b; color: #fff; border: 1px solid #475569;
+      padding: 5px 10px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 12px;
+    }
+    #floating-selection-menu button:hover { background: var(--primary); color: #000; }
+  </style>
+</head>
+<body>
+
+<div id="floating-selection-menu" class="hidden">
+  <button onmousedown="handleSelectionAction('append', event)">📎 Додај во тековната вежба</button>
+  <button onmousedown="handleSelectionAction('new', event)">➕ Нова вежба од селектираното</button>
+</div>
+
+<div class="container">
+  <header class="header">
+    <div class="brand">
+      <svg class="shiv-baba-logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="babaAura" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#ffffff"/>
+            <stop offset="22%" stop-color="#fef08a"/>
+            <stop offset="55%" stop-color="#f59e0b"/>
+            <stop offset="85%" stop-color="#dc2626" stop-opacity="0.85"/>
+            <stop offset="100%" stop-color="#dc2626" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <ellipse cx="50" cy="50" rx="34" ry="44" fill="url(#babaAura)"/>
+        <g stroke="#fef08a" stroke-width="1.2" opacity="0.65">
+          <line x1="50" y1="8" x2="50" y2="92"/>
+          <line x1="14" y1="50" x2="86" y2="50"/>
+          <line x1="22" y1="22" x2="78" y2="78"/>
+          <line x1="78" y1="22" x2="22" y2="78"/>
+        </g>
+        <circle cx="50" cy="50" r="4.5" fill="#ffffff"/>
+      </svg>
+      <div>
+        <h1 class="brand-title" id="app-main-title">Авијакт Мурли Практики</h1>
+        <p class="brand-sub" id="app-subtitle">Ом Шанти • Календар на духовни вежби од БапДада</p>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="btn hidden" id="btn-install-pwa" onclick="installPWA()">📲 Инсталирај Апликација</button>
+      <button class="btn active" id="lang-mk" onclick="switchAppLang('mk')">🇲🇰 МК</button>
+      <button class="btn" id="lang-shb" onclick="switchAppLang('shb')">🇷🇸/🇭🇷/🇧🇦 SHB</button>
+      <button class="btn" onclick="toggleTheme()" id="btn-theme">☀️ Светла</button>
+      <button class="btn" onclick="toggleEditorMode()" id="btn-editor-mode">⚙️ Уредник</button>
+    </div>
+  </header>
+
+  <!-- ПОЛЕ ЗА АВТОМАТСКО ПОВРЗУВАЊЕ СО GOOGLE ТАБЕЛАТА (Се појавува само ако не е внесен линкот) -->
+  <div id="setup-url-banner" class="panel-card hidden" style="border: 2px solid var(--primary);">
+    <h3 style="margin-top:0; color:var(--primary);">🔗 Поврзи ја апликацијата со твојот Google Sheet (Еднократно)</h3>
+    <p style="font-size:13.5px; color:var(--muted);">Залепи го твојот <b>Web App URL</b> линк од Google Apps Script (тој што завршува на <code>/exec</code>):</p>
+    <input type="text" id="input-script-url" placeholder="https://script.google.com/macros/s/.../exec">
+    <button class="btn btn-primary" onclick="saveScriptUrl()">✅ Зачувај и Поврзи</button>
+  </div>
+
+  <!-- 1. КОРИСНИЧКИ ДЕЛ -->
+  <div id="user-view">
+    <div class="nav-tabs">
+      <button class="nav-tab active" id="tab-active" onclick="setUserTab('active')">🔥 Активни денес</button>
+      <button class="nav-tab" id="tab-calendar" onclick="setUserTab('calendar')">📅 Мој Календар на рокови</button>
+      <button class="nav-tab" id="tab-all" onclick="setUserTab('all')">📚 Архива на сите Мурли</button>
+    </div>
+
+    <div id="user-loading" class="panel-card" style="text-align:center;">
+      ⏳ Се вчитуваат духовните вежби...
+    </div>
+
+    <div id="user-tasks-container" class="tasks-grid"></div>
+  </div>
+
+  <!-- 2. УРЕДНИЧКИ ПАНЕЛ -->
+  <div id="editor-view" class="hidden">
+    <div class="panel-card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:10px;">
+        <h2 style="margin:0; font-size:18px; color:var(--primary);">✨ Уреднички Панел - Внес и превод на Авијакт Мурли</h2>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button class="btn" onclick="changeScriptUrl()">🔗 Промени API линк</button>
+          <button class="btn" onclick="toggleGlossary()">📖 Правилник за превод</button>
+          <button class="btn" onclick="toggleEditorMode()">⬅ Назад кон Апликацијата</button>
+        </div>
+      </div>
+
+      <div id="glossary-panel" class="panel-card hidden" style="background:var(--card-alt);">
+        <strong>Додај нов термин во Правилникот:</strong>
+        <div class="grid-2" style="grid-template-columns: 1fr 1fr 1fr auto; gap:8px; margin-top:10px; align-items:end;">
+          <div><label>English</label><input type="text" id="g-en" style="margin:0;"></div>
+          <div><label>Македонски</label><input type="text" id="g-mk" style="margin:0;"></div>
+          <div><label>SHB</label><input type="text" id="g-shb" style="margin:0;"></div>
+          <button class="btn btn-success" onclick="addTerm()">+ Додај</button>
+        </div>
+        <div id="glossary-items" style="max-height:130px; overflow-y:auto; font-size:13px; margin-top:10px;"></div>
+      </div>
+
+      <div id="step-1">
+        <label>Датум на Авијакт Мурли:</label>
+        <input type="text" id="murli-date" value="15.11.2026" style="max-width:220px;">
+
+        <label>Залепи го англискиот текст од Мурлито:</label>
+        <textarea id="murli-text" rows="10" placeholder="Залепи го целиот текст од Авијакт мурлито тука..."></textarea>
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="btn btn-primary" id="btn-analyze" onclick="startAnalysis()">✨ 1. Преведи цело Мурли + Предложи детални вежби со АИ</button>
+          <button class="btn" onclick="openExternalAiPanel()">🤖 2. Користи мој ChatGPT / Gemini</button>
+          <button class="btn" onclick="startFullMurliManual()">📖 3. Само преведи го целото Мурли</button>
+        </div>
+
+        <p id="loading-msg" class="hidden" style="color:var(--primary); font-weight:600; margin-top:12px;">
+          ⏳ Се спојуваат речениците во 10-12 целини и се преведува мурлито (15-30 секунди)...
+        </p>
+
+        <div id="external-ai-panel" class="panel-card hidden" style="margin-top:14px; background:var(--card-alt);">
+          <button class="btn btn-primary" onclick="copyGeneratedPrompt()" style="margin-bottom:10px;">📋 1. Копирај го готовиот промпт</button>
+          <textarea id="generated-prompt-box" rows="4" readonly></textarea>
+          <label>2. Залепи го JSON одговорот од твојот ChatGPT / Gemini:</label>
+          <textarea id="pasted-ai-json" rows="4"></textarea>
+          <button class="btn btn-success" onclick="loadPastedJson()">✅ Вчитај ги задачите ➔</button>
+        </div>
+      </div>
+
+      <div id="step-2" class="hidden">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <span style="font-size:13px; color:var(--primary);">💡 Селектирај кој било дел од текстот лево со глувчето за да се појави лебдечкото копче!</span>
+          <button class="btn btn-sm" onclick="resetWizard()">⬅ Внеси друго Мурли</button>
+        </div>
+
+        <div class="workspace-grid">
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+              <strong>📜 Целото преведено Мурли</strong>
+              <div>
+                <button id="r-mk" class="btn btn-sm active" onclick="setReaderLang('mk')">МК</button>
+                <button id="r-shb" class="btn btn-sm" onclick="setReaderLang('shb')">SHB</button>
+                <button id="r-en" class="btn btn-sm" onclick="setReaderLang('en')">EN</button>
+              </div>
+            </div>
+            <div class="murli-reader" id="murli-paragraphs-container"></div>
+          </div>
+
+          <div class="panel-card" style="margin:0;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+              <strong>🎯 Вежби за во Апликацијата:</strong>
+              <button class="btn btn-sm" onclick="createBlankTask()">➕ Празна вежба</button>
+            </div>
+
+            <div class="task-pills" id="task-pills-container"></div>
+            <p id="translating-snippet-msg" class="hidden" style="color:var(--success); font-size:13px;">⏳ Се преведува селектираниот дел...</p>
+
+            <label>🇲🇰 Наслов на вежбата (МК):</label>
+            <input type="text" id="edit-mk-title" oninput="syncCurrentEdits()">
+            <label>🇲🇰 Како се прави вежбата - Детален потсетник (МК):</label>
+            <textarea id="edit-mk-desc" rows="6" oninput="syncCurrentEdits()"></textarea>
+
+            <label>🇷🇸/🇭🇷/🇧🇦 Naslov vežbe (SHB):</label>
+            <input type="text" id="edit-shb-title" oninput="syncCurrentEdits()">
+            <label>🇷🇸/🇭🇷/🇧🇦 Kako se radi vežba - Detaljni podsetnik (SHB):</label>
+            <textarea id="edit-shb-desc" rows="6" oninput="syncCurrentEdits()"></textarea>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px; flex-wrap:wrap; gap:10px;">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <label style="margin:0;">Рок (денови):</label>
+                <input type="number" id="edit-days" value="7" style="width:80px; margin:0;" oninput="syncCurrentEdits()">
+              </div>
+              <div style="display:flex; gap:8px;">
+                <button class="btn btn-danger" onclick="deleteCurrentTask()">🗑️ Избриши</button>
+                <button class="btn btn-success" id="btn-approve" onclick="approveTask()">✅ Одобри и зачувај во База ➔</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  var SCRIPT_URL = localStorage.getItem('bk_script_url') || '';
+  const EDITOR_PIN = '108';
+
+  var appLang = localStorage.getItem('bk_lang') || 'mk';
+  var userTab = 'active';
+  var serverTasks = [];
+  var userProgress = JSON.parse(localStorage.getItem('bk_progress') || '{}');
+
+  var readerLang = 'mk';
+  var allParagraphs = [];
+  var extractedTasks = [];
+  var currentIndex = 0;
+  var selectedSnippetCache = "";
+  var deferredPrompt = null;
+
+  function isRunningInsideGoogle() {
+    return (typeof google !== 'undefined' && google.script && google.script.run);
+  }
+
+  function saveScriptUrl() {
+    var val = document.getElementById('input-script-url').value.trim();
+    if (!val || val.indexOf('https://script.google.com') !== 0) {
+      alert("Внесете валиден линк што почнува со https://script.google.com...");
+      return;
+    }
+    SCRIPT_URL = val;
+    localStorage.setItem('bk_script_url', SCRIPT_URL);
+    document.getElementById('setup-url-banner').classList.add('hidden');
+    loadApprovedTasks();
+  }
+
+  function changeScriptUrl() {
+    var nv = prompt("Внесете го вашиот Google Apps Script Web App URL (/exec):", SCRIPT_URL);
+    if (nv && nv.trim()) {
+      SCRIPT_URL = nv.trim();
+      localStorage.setItem('bk_script_url', SCRIPT_URL);
+      loadApprovedTasks();
+    }
+  }
+
+  function callBackend(action, payload, onSuccess, onError) {
+    if (isRunningInsideGoogle()) {
+      var runner = google.script.run.withSuccessHandler(onSuccess).withFailureHandler(onError || function(e){ alert(e.message); });
+      if (action === 'getGlossary') runner.getGlossaryFromSheet();
+      else if (action === 'addGlossary') runner.addGlossaryTermFromWeb(payload.en, payload.mk, payload.shb);
+      else if (action === 'analyzeMurli') runner.analyzeMurliFromWeb(payload.murliDate, payload.inputText);
+      else if (action === 'translateOnly') runner.getTranslatedParagraphsOnly(payload.inputText);
+      else if (action === 'translateSnippet') runner.translateSelectedSnippet(payload.snippet, payload.lang);
+      else if (action === 'buildPrompt') runner.buildPromptText(payload.inputText);
+      else if (action === 'saveTask') runner.saveApprovedTaskFromWeb(payload.taskData);
+      return;
+    }
+
+    if (!SCRIPT_URL) {
+      document.getElementById('setup-url-banner').classList.remove('hidden');
+      return;
+    }
+
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      body: JSON.stringify(Object.assign({ action: action }, payload || {}))
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(res) {
+      if (res.ok) onSuccess(res.data);
+      else if (onError) onError(new Error(res.error));
+      else alert("Грешка: " + res.error);
+    })
+    .catch(function(err) {
+      if (onError) onError(err);
+      else alert("Грешка при поврзување: " + err.message);
+    });
+  }
+
+  function loadApprovedTasks() {
+    if (!isRunningInsideGoogle() && !SCRIPT_URL) {
+      document.getElementById('user-loading').classList.add('hidden');
+      document.getElementById('setup-url-banner').classList.remove('hidden');
+      return;
+    }
+
+    document.getElementById('user-loading').classList.remove('hidden');
+    var fetchUrl = isRunningInsideGoogle() ? window.location.href.split('?')[0] + "?api=1" : SCRIPT_URL + "?api=1";
+
+    fetch(fetchUrl)
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        document.getElementById('user-loading').classList.add('hidden');
+        serverTasks = data || [];
+        initDefaultProgress();
+        renderUserTasks();
+      })
+      .catch(function() {
+        document.getElementById('user-loading').innerText = "Не може да се вчитаат вежбите. Проверете го API линкот преку копчето Уредник.";
+      });
+  }
+
+  function initDefaultProgress() {
+    var now = new Date();
+    serverTasks.forEach(function(t) {
+      if (!userProgress[t.id]) {
+        var due = new Date();
+        due.setDate(now.getDate() + (Number(t.preporacan_rok) || 7));
+        userProgress[t.id] = {
+          dueDate: due.toISOString().split('T')[0],
+          practicedCount: 0,
+          lastPracticed: null
+        };
+      }
+    });
+    saveLocalProgress();
+  }
+
+  function saveLocalProgress() {
+    localStorage.setItem('bk_progress', JSON.stringify(userProgress));
+  }
+
+  function extendTaskDeadline(taskId, extraDays) {
+    var prog = userProgress[taskId];
+    if (!prog) return;
+    var base = new Date(prog.dueDate);
+    var today = new Date();
+    if (base < today) base = today;
+    base.setDate(base.getDate() + extraDays);
+    prog.dueDate = base.toISOString().split('T')[0];
+    saveLocalProgress();
+    renderUserTasks();
+  }
+
+  function markPracticedToday(taskId) {
+    var prog = userProgress[taskId];
+    if (!prog) return;
+    var todayStr = new Date().toISOString().split('T')[0];
+    if (prog.lastPracticed !== todayStr) {
+      prog.practicedCount = (prog.practicedCount || 0) + 1;
+      prog.lastPracticed = todayStr;
+      saveLocalProgress();
+      renderUserTasks();
+    }
+  }
+
+  function renderUserTasks() {
+    var container = document.getElementById('user-tasks-container');
+    var todayStr = new Date().toISOString().split('T')[0];
+
+    var filtered = serverTasks.filter(function(t) {
+      var prog = userProgress[t.id];
+      if (userTab === 'active') return prog && prog.dueDate >= todayStr;
+      return true;
+    });
+
+    if (userTab === 'calendar') {
+      filtered.sort(function(a, b) {
+        return (userProgress[a.id].dueDate > userProgress[b.id].dueDate) ? 1 : -1;
+      });
+    }
+
+    if (filtered.length === 0) {
+      container.innerHTML = '<div class="panel-card">Нема активни вежби во оваа категорија.</div>';
+      return;
+    }
+
+    container.innerHTML = filtered.map(function(t) {
+      var title = (appLang === 'mk') ? t.mk_naslov : t.shb_naslov;
+      var body = (appLang === 'mk') ? t.mk_vezba : t.shb_vezba;
+      var prog = userProgress[t.id] || { dueDate: todayStr, practicedCount: 0 };
+      var doneToday = (prog.lastPracticed === todayStr);
+
+      var lblUntil = (appLang === 'mk') ? "Активна до: " : "Aktivna do: ";
+      var btnPractice = doneToday
+        ? ((appLang === 'mk') ? "✨ Практикувано денес (" + prog.practicedCount + ")" : "✨ Praktikovano danas (" + prog.practicedCount + ")")
+        : ((appLang === 'mk') ? "✅ Практикував денес" : "✅ Praktikovao/la sam danas");
+      var btnExtend = (appLang === 'mk') ? "⏳ +7 дена" : "⏳ +7 dana";
+
+      return '<div class="task-card">' +
+        '<div>' +
+          '<div class="task-meta">' +
+            '<span class="murli-badge">📅 Мурли: ' + t.murli_datum + '</span>' +
+            '<span>' + lblUntil + '<b>' + prog.dueDate + '</b></span>' +
+          '</div>' +
+          '<h3 class="task-title">' + title + '</h3>' +
+          '<div class="task-body">' + body + '</div>' +
+        '</div>' +
+        '<div class="task-footer">' +
+          '<button class="btn ' + (doneToday ? 'btn-success' : 'btn-primary') + ' btn-sm" onclick="markPracticedToday(\'' + t.id + '\')">' + btnPractice + '</button>' +
+          '<button class="btn btn-sm" onclick="extendTaskDeadline(\'' + t.id + '\', 7)">' + btnExtend + '</button>' +
+        '</div>' +
+      '</div>';
+    }).join("");
+  }
+
+  function setUserTab(tab) {
+    userTab = tab;
+    document.getElementById('tab-active').className = (tab === 'active') ? 'nav-tab active' : 'nav-tab';
+    document.getElementById('tab-calendar').className = (tab === 'calendar') ? 'nav-tab active' : 'nav-tab';
+    document.getElementById('tab-all').className = (tab === 'all') ? 'nav-tab active' : 'nav-tab';
+    renderUserTasks();
+  }
+
+  function switchAppLang(lang) {
+    appLang = lang;
+    localStorage.setItem('bk_lang', lang);
+    document.getElementById('lang-mk').className = (lang === 'mk') ? 'btn active' : 'btn';
+    document.getElementById('lang-shb').className = (lang === 'shb') ? 'btn active' : 'btn';
+
+    if (lang === 'mk') {
+      document.getElementById('app-main-title').innerText = "Авијакт Мурли Практики";
+      document.getElementById('app-subtitle').innerText = "Ом Шанти • Календар на духовни вежби од БапДада";
+      document.getElementById('tab-active').innerText = "🔥 Активни денес";
+      document.getElementById('tab-calendar').innerText = "📅 Мој Календар на рокови";
+      document.getElementById('tab-all').innerText = "📚 Архива на сите Мурли";
+    } else {
+      document.getElementById('app-main-title').innerText = "Avijakt Murli Prakse";
+      document.getElementById('app-subtitle').innerText = "Om Šanti • Kalendar duhovnih vežbi od BapDade";
+      document.getElementById('tab-active').innerText = "🔥 Aktivne danas";
+      document.getElementById('tab-calendar').innerText = "📅 Moj Kalendar rokova";
+      document.getElementById('tab-all').innerText = "📚 Arhiva svih Murlija";
+    }
+    setReaderLang(lang);
+    renderUserTasks();
+  }
+
+  function toggleTheme() {
+    var html = document.documentElement;
+    var current = html.getAttribute('data-theme');
+    var next = (current === 'dark') ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('bk_theme', next);
+    document.getElementById('btn-theme').innerText = (next === 'dark') ? '☀️ Светла' : '🌙 Темна';
+  }
+
+  function toggleEditorMode() {
+    var ed = document.getElementById('editor-view');
+    var us = document.getElementById('user-view');
+    if (ed.classList.contains('hidden')) {
+      var pin = prompt("Внесете уреднички ПИН (стандардно: 108):");
+      if (pin !== EDITOR_PIN) return alert("Погрешен ПИН!");
+      us.classList.add('hidden');
+      ed.classList.remove('hidden');
+    } else {
+      ed.classList.add('hidden');
+      us.classList.remove('hidden');
+      loadApprovedTasks();
+    }
+  }
+
+  document.addEventListener('mouseup', function(e) {
+    var menu = document.getElementById('floating-selection-menu');
+    var reader = document.getElementById('murli-paragraphs-container');
+    if (!reader || !reader.contains(e.target)) {
+      menu.classList.add('hidden');
+      return;
+    }
+    setTimeout(function() {
+      var sel = window.getSelection();
+      var text = sel ? sel.toString().trim() : "";
+      if (text.length > 5) {
+        selectedSnippetCache = text;
+        var rect = sel.getRangeAt(0).getBoundingClientRect();
+        menu.style.top = Math.max(10, rect.top - 46) + 'px';
+        menu.style.left = Math.min(window.innerWidth - 360, Math.max(10, rect.left)) + 'px';
+        menu.classList.remove('hidden');
+      } else {
+        menu.classList.add('hidden');
+      }
+    }, 20);
+  });
+
+  function handleSelectionAction(mode, event) {
+    event.preventDefault();
+    event.stopPropagation();
+    document.getElementById('floating-selection-menu').classList.add('hidden');
+    if (!selectedSnippetCache) return;
+
+    var snippet = selectedSnippetCache;
+    window.getSelection().removeAllRanges();
+    document.getElementById('translating-snippet-msg').classList.remove('hidden');
+
+    callBackend('translateSnippet', { snippet: snippet, lang: readerLang }, function(res) {
+      document.getElementById('translating-snippet-msg').classList.add('hidden');
+      if (mode === 'new') {
+        extractedTasks.push({
+          para_index: -1,
+          mk_naslov: "Нова избрана вежба",
+          mk_vezba: res.mk,
+          shb_naslov: "Nova izabrana vežba",
+          shb_vezba: res.shb,
+          preporacan_rok: 7
+        });
+        currentIndex = extractedTasks.length - 1;
+      } else {
+        syncCurrentEdits();
+        var item = extractedTasks[currentIndex];
+        item.mk_vezba = (item.mk_vezba ? item.mk_vezba + "\n\n" : "") + res.mk;
+        item.shb_vezba = (item.shb_vezba ? item.shb_vezba + "\n\n" : "") + res.shb;
+      }
+      renderTaskPills();
+      showCurrentTask();
+    });
+  }
+
+  function setReaderLang(rLang) {
+    readerLang = rLang;
+    document.getElementById('r-mk').className = (rLang === 'mk') ? 'btn btn-sm active' : 'btn btn-sm';
+    document.getElementById('r-shb').className = (rLang === 'shb') ? 'btn btn-sm active' : 'btn btn-sm';
+    document.getElementById('r-en').className = (rLang === 'en') ? 'btn btn-sm active' : 'btn btn-sm';
+    renderFullMurliReader();
+  }
+
+  function toggleGlossary() {
+    var p = document.getElementById('glossary-panel');
+    p.classList.toggle('hidden');
+    if (!p.classList.contains('hidden')) {
+      callBackend('getGlossary', {}, renderGlossary);
+    }
+  }
+
+  function renderGlossary(list) {
+    document.getElementById('glossary-items').innerHTML = list.map(function(item) {
+      return "<div>• <b>" + item.en + "</b> ➔ 🇲🇰 " + item.mk + " | 🇷🇸🇭🇷🇧🇦 " + item.shb + "</div>";
+    }).join("");
+  }
+
+  function addTerm() {
+    var en = document.getElementById('g-en').value;
+    var mk = document.getElementById('g-mk').value;
+    var shb = document.getElementById('g-shb').value;
+    if (!en || !mk || !shb) return alert("Пополнете ги сите 3 полиња!");
+    callBackend('addGlossary', { en: en, mk: mk, shb: shb }, function(list) {
+      document.getElementById('g-en').value = '';
+      document.getElementById('g-mk').value = '';
+      document.getElementById('g-shb').value = '';
+      renderGlossary(list);
+    });
+  }
+
+  function startAnalysis() {
+    var murliDate = document.getElementById('murli-date').value.trim();
+    var text = document.getElementById('murli-text').value.trim();
+    if (!text) return alert("Залепете текст од мурлито!");
+    document.getElementById('btn-analyze').disabled = true;
+    document.getElementById('loading-msg').classList.remove('hidden');
+
+    callBackend('analyzeMurli', { murliDate: murliDate, inputText: text }, function(res) {
+      document.getElementById('btn-analyze').disabled = false;
+      document.getElementById('loading-msg').classList.add('hidden');
+      allParagraphs = res.paragraphs || [];
+      extractedTasks = res.tasks || [];
+      launchWorkspace();
+    }, function(err) {
+      document.getElementById('btn-analyze').disabled = false;
+      document.getElementById('loading-msg').classList.add('hidden');
+      alert("АИ серверот врати порака: " + err.message + "\nКористете го панелот за сопствен ChatGPT/Gemini подолу.");
+      openExternalAiPanel();
+    });
+  }
+
+  function openExternalAiPanel() {
+    var text = document.getElementById('murli-text').value.trim();
+    if (!text) return alert("Прво залепете го текстот!");
+    document.getElementById('external-ai-panel').classList.remove('hidden');
+    callBackend('buildPrompt', { inputText: text }, function(promptText) {
+      document.getElementById('generated-prompt-box').value = promptText;
+    });
+  }
+
+  function copyGeneratedPrompt() {
+    var box = document.getElementById('generated-prompt-box');
+    box.select();
+    document.execCommand('copy');
+    alert("✅ Промптот е копиран!");
+  }
+
+  function loadPastedJson() {
+    var text = document.getElementById('murli-text').value.trim();
+    var raw = document.getElementById('pasted-ai-json').value.trim();
+    var s = raw.indexOf('['), e = raw.lastIndexOf(']');
+    if (s !== -1 && e !== -1) raw = raw.substring(s, e + 1);
+    var tasks = JSON.parse(raw);
+    callBackend('translateOnly', { inputText: text }, function(paras) {
+      allParagraphs = paras;
+      extractedTasks = tasks;
+      launchWorkspace();
+    });
+  }
+
+  function startFullMurliManual() {
+    var text = document.getElementById('murli-text').value.trim();
+    if (!text) return alert("Прво залепете го текстот!");
+    document.getElementById('loading-msg').classList.remove('hidden');
+    callBackend('translateOnly', { inputText: text }, function(paras) {
+      document.getElementById('loading-msg').classList.add('hidden');
+      allParagraphs = paras;
+      extractedTasks = [{ para_index: 0, mk_naslov: "Вежба 1", mk_vezba: paras[0] ? paras[0].mk : "", shb_naslov: "Vežba 1", shb_vezba: paras[0] ? paras[0].shb : "", preporacan_rok: 7 }];
+      launchWorkspace();
+    });
+  }
+
+  function launchWorkspace() {
+    currentIndex = 0;
+    document.getElementById('step-1').classList.add('hidden');
+    document.getElementById('step-2').classList.remove('hidden');
+    renderFullMurliReader();
+    renderTaskPills();
+    showCurrentTask();
+  }
+
+  function renderFullMurliReader() {
+    var pickedIndices = extractedTasks.map(function(t) { return Number(t.para_index); });
+    document.getElementById('murli-paragraphs-container').innerHTML = allParagraphs.map(function(p) {
+      var isPicked = pickedIndices.indexOf(p.index) !== -1;
+      var txt = (readerLang === 'mk') ? p.mk : ((readerLang === 'shb') ? p.shb : p.en);
+      return '<div class="para-card ' + (isPicked ? 'ai-picked' : '') + '">' +
+        '<div class="para-header"><span>Дел #' + (p.index + 1) + '</span>' + (isPicked ? '<span>⭐ АИ Избор</span>' : '') + '</div>' +
+        '<div>' + txt + '</div>' +
+      '</div>';
+    }).join("");
+  }
+
+  function createBlankTask() {
+    extractedTasks.push({ para_index: -1, mk_naslov: "Нова вежба", mk_vezba: "", shb_naslov: "Nova vežba", shb_vezba: "", preporacan_rok: 7 });
+    currentIndex = extractedTasks.length - 1;
+    renderTaskPills();
+    showCurrentTask();
+  }
+
+  function renderTaskPills() {
+    document.getElementById('task-pills-container').innerHTML = extractedTasks.map(function(t, idx) {
+      var cls = "task-pill" + (idx === currentIndex ? " active" : "") + (t._saved ? " saved" : "");
+      return '<button class="' + cls + '" onclick="selectTask(' + idx + ')">' + (t._saved ? "✅ " : "🎯 ") + (idx + 1) + '. ' + (t.mk_naslov || "Вежба") + '</button>';
+    }).join("");
+  }
+
+  function selectTask(idx) {
+    syncCurrentEdits();
+    currentIndex = idx;
+    renderTaskPills();
+    showCurrentTask();
+  }
+
+  function syncCurrentEdits() {
+    if (!extractedTasks[currentIndex]) return;
+    var item = extractedTasks[currentIndex];
+    item.mk_naslov = document.getElementById('edit-mk-title').value;
+    item.mk_vezba = document.getElementById('edit-mk-desc').value;
+    item.shb_naslov = document.getElementById('edit-shb-title').value;
+    item.shb_vezba = document.getElementById('edit-shb-desc').value;
+    item.preporacan_rok = document.getElementById('edit-days').value;
+  }
+
+  function showCurrentTask() {
+    var item = extractedTasks[currentIndex];
+    if (!item) return;
+    document.getElementById('edit-mk-title').value = item.mk_naslov || "";
+    document.getElementById('edit-mk-desc').value = item.mk_vezba || "";
+    document.getElementById('edit-shb-title').value = item.shb_naslov || "";
+    document.getElementById('edit-shb-desc').value = item.shb_vezba || "";
+    document.getElementById('edit-days').value = item.preporacan_rok || 7;
+  }
+
+  function approveTask() {
+    syncCurrentEdits();
+    var item = extractedTasks[currentIndex];
+    var btn = document.getElementById('btn-approve');
+    btn.disabled = true;
+
+    var payload = {
+      murliDate: document.getElementById('murli-date').value.trim(),
+      originalen_pasus: "",
+      mk_naslov: item.mk_naslov,
+      mk_vezba: item.mk_vezba,
+      shb_naslov: item.shb_naslov,
+      shb_vezba: item.shb_vezba,
+      preporacan_rok: item.preporacan_rok
+    };
+
+    callBackend('saveTask', { taskData: payload }, function() {
+      btn.disabled = false;
+      item._saved = true;
+      renderTaskPills();
+      if (currentIndex + 1 < extractedTasks.length) selectTask(currentIndex + 1);
+      else alert("🎉 Вежбата е зачувана во базата и веднаш е достапна во корисничкиот дел!");
+    });
+  }
+
+  function deleteCurrentTask() {
+    if (extractedTasks.length <= 1) return;
+    extractedTasks.splice(currentIndex, 1);
+    if (currentIndex >= extractedTasks.length) currentIndex = extractedTasks.length - 1;
+    renderTaskPills();
+    showCurrentTask();
+  }
+
+  function resetWizard() {
+    document.getElementById('step-2').classList.add('hidden');
+    document.getElementById('step-1').classList.remove('hidden');
+  }
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').catch(function(){});
+  }
+  window.addEventListener('beforeinstallprompt', function(e) {
+    e.preventDefault();
+    deferredPrompt = e;
+    document.getElementById('btn-install-pwa').classList.remove('hidden');
+  });
+  function installPWA() {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+  }
+
+  var savedTheme = localStorage.getItem('bk_theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  document.getElementById('btn-theme').innerText = (savedTheme === 'dark') ? '☀️ Светла' : '🌙 Темна';
+  switchAppLang(appLang);
+  loadApprovedTasks();
+</script>
+</body>
+</html>
