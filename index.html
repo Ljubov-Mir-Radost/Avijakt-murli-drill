@@ -224,7 +224,7 @@
   <!-- ГОРЕН ХЕДЕР СО ШИВ БАБА ЛОГО -->
   <header class="header">
     <div class="brand">
-      <svg class="shiv-baba-logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <svg class="shiv-baba-logo" viewBox="0 0 100 100" xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)">
         <defs>
           <radialGradient id="babaAura" cx="50%" cy="50%" r="50%">
             <stop offset="0%" stop-color="#ffffff"/>
@@ -337,13 +337,24 @@
   <div id="editor-view" class="hidden">
     <div class="panel-card">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:10px;">
-        <h2 style="margin:0; font-size:18px; color:var(--primary);">✨ Уреднички Панел - Внес и превод на Авијакт Мурли</h2>
+        <h2 style="margin:0; font-size:18px; color:var(--primary);">✨ Уреднички Панел - Авијакт Мурли</h2>
         <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button class="btn btn-primary" onclick="togglePublishedManager()">✏️ Уреди објавени вежби</button>
           <button class="btn" onclick="toggleGlossary()">📖 Правилник за превод</button>
           <button class="btn" onclick="toggleEditorMode()">⬅ Назад кон Апликацијата</button>
         </div>
       </div>
 
+      <!-- ПАНЕЛ ЗА УРЕДУВАЊЕ И БРИШЕЊЕ НА ВЕЌЕ ОБЈАВЕНИ ВЕЖБИ -->
+      <div id="published-tasks-panel" class="panel-card hidden" style="background:var(--card-alt); border:2px solid var(--primary);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <strong style="color:var(--primary); font-size:16px;">✏️ Уреди или избриши веќе објавени вежби од базата:</strong>
+          <button class="btn btn-sm" onclick="togglePublishedManager()">✖ Затвори</button>
+        </div>
+        <div id="published-tasks-list"></div>
+      </div>
+
+      <!-- ПРАВИЛНИК -->
       <div id="glossary-panel" class="panel-card hidden" style="background:var(--card-alt);">
         <strong>Додај нов термин во Правилникот:</strong>
         <div class="grid-2" style="grid-template-columns: 1fr 1fr 1fr auto; gap:8px; margin-top:10px; align-items:end;">
@@ -355,6 +366,7 @@
         <div id="glossary-items" style="max-height:130px; overflow-y:auto; font-size:13px; margin-top:10px;"></div>
       </div>
 
+      <!-- ЧЕКОР 1: ВНЕС НА НОВО МУРЛИ -->
       <div id="step-1">
         <label>Датум на Авијакт Мурли:</label>
         <input type="text" id="murli-date" value="15.11.2026" style="max-width:220px;">
@@ -381,6 +393,7 @@
         </div>
       </div>
 
+      <!-- ЧЕКОР 2: РАБОТЕН ПРОСТОР -->
       <div id="step-2" class="hidden">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
           <span style="font-size:13px; color:var(--primary);">💡 Селектирај кој било дел од текстот лево со глувчето за да се појави лебдечкото копче!</span>
@@ -437,7 +450,7 @@
 </div>
 
 <script>
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzebDVzhxqfBI7dZWJh-xOSAMZQ9gBvRTnwUKNKCh3l3O3UgCWSZPVloe5377BBSSQBiQ/exec";
+  const SCRIPT_URL = "[https://script.google.com/macros/s/AKfycbzebDVzhxqfBI7dZWJh-xOSAMZQ9gBvRTnwUKNKCh3l3O3UgCWSZPVloe5377BBSSQBiQ/exec](https://script.google.com/macros/s/AKfycbzebDVzhxqfBI7dZWJh-xOSAMZQ9gBvRTnwUKNKCh3l3O3UgCWSZPVloe5377BBSSQBiQ/exec)";
 
   var sessionPin = sessionStorage.getItem('bk_editor_pin') || '';
   var appLang = localStorage.getItem('bk_lang') || 'mk';
@@ -562,7 +575,6 @@
     window._toastTimer = setTimeout(function() { box.classList.add('hidden'); }, 2600);
   }
 
-  // ЗАШТИТЕН ПОВИК КОН СЕРВЕРОТ СО ПИН АВТЕНТИКАЦИЈА
   function callBackend(action, payload, onSuccess, onError) {
     fetch(SCRIPT_URL, {
       method: 'POST',
@@ -581,7 +593,7 @@
     });
   }
 
-  function loadApprovedTasks() {
+  function loadApprovedTasks(callback) {
     document.getElementById('user-loading').classList.remove('hidden');
     fetch(SCRIPT_URL + "?api=1")
       .then(function(r) { return r.json(); })
@@ -590,6 +602,7 @@
         serverTasks = data || [];
         initDefaultProgress();
         refreshAllUserViews();
+        if (callback) callback();
       })
       .catch(function() {
         document.getElementById('user-loading').innerText = "Се вчитува врската со базата на вежби...";
@@ -936,7 +949,6 @@
     document.getElementById('btn-theme').innerText = (next === 'dark') ? '☀️ Светла' : '🌙 Темна';
   }
 
-  // СЕРВЕРСКА ПРОВЕРКА НА ТАЈНИОТ ПИН ЗА УРЕДНИКОТ
   function toggleEditorMode() {
     var ed = document.getElementById('editor-view');
     var us = document.getElementById('user-view');
@@ -958,6 +970,76 @@
       us.classList.remove('hidden');
       loadApprovedTasks();
     }
+  }
+
+  // ПАНЕЛ ЗА УРЕДУВАЊЕ И БРИШЕЊЕ НА ВЕЌЕ ОБЈАВЕНИ ВЕЖБИ
+  function togglePublishedManager() {
+    var p = document.getElementById('published-tasks-panel');
+    p.classList.toggle('hidden');
+    if (!p.classList.contains('hidden')) {
+      renderPublishedTasksEditor();
+    }
+  }
+
+  function escapeAttr(s) {
+    return String(s || "").replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
+  function renderPublishedTasksEditor() {
+    var container = document.getElementById('published-tasks-list');
+    if (serverTasks.length === 0) {
+      container.innerHTML = "<p>Нема објавени вежби во базата.</p>";
+      return;
+    }
+
+    container.innerHTML = serverTasks.map(function(t) {
+      return '<div class="panel-card" style="margin-bottom:14px; border:1px solid var(--border);">' +
+        '<div class="grid-2" style="grid-template-columns: 1fr 1fr; gap:10px;">' +
+          '<div><label>Датум на Мурли:</label><input type="text" id="pub-date-' + t.id + '" value="' + escapeAttr(t.murli_datum) + '"></div>' +
+          '<div><label>Препорачан рок (денови):</label><input type="number" id="pub-rok-' + t.id + '" value="' + (t.preporacan_rok || 7) + '"></div>' +
+        '</div>' +
+        '<div class="grid-2">' +
+          '<div>' +
+            '<label>🇲🇰 МК Наслов:</label><input type="text" id="pub-mkt-' + t.id + '" value="' + escapeAttr(t.mk_naslov) + '">' +
+            '<label>🇲🇰 МК Вежба (Поправи зборови тука):</label><textarea id="pub-mkd-' + t.id + '" rows="5">' + escapeAttr(t.mk_vezba) + '</textarea>' +
+          '</div>' +
+          '<div>' +
+            '<label>🇷🇸/🇭🇷/🇧🇦 SHB Наслов:</label><input type="text" id="pub-shbt-' + t.id + '" value="' + escapeAttr(t.shb_naslov) + '">' +
+            '<label>🇷🇸/🇭🇷/🇧🇦 SHB Вежба:</label><textarea id="pub-shbd-' + t.id + '" rows="5">' + escapeAttr(t.shb_vezba) + '</textarea>' +
+          '</div>' +
+        '</div>' +
+        '<div style="display:flex; justify-content:space-between; margin-top:6px;">' +
+          '<button class="btn btn-danger btn-sm" onclick="deletePublishedTask(\'' + t.id + '\')">🗑️ Избриши од база</button>' +
+          '<button class="btn btn-success" onclick="savePublishedTaskChanges(\'' + t.id + '\')">💾 Зачувај промени</button>' +
+        '</div>' +
+      '</div>';
+    }).join("");
+  }
+
+  function savePublishedTaskChanges(taskId) {
+    var updated = {
+      id: taskId,
+      murli_datum: document.getElementById('pub-date-' + taskId).value.trim(),
+      preporacan_rok: Number(document.getElementById('pub-rok-' + taskId).value) || 7,
+      mk_naslov: document.getElementById('pub-mkt-' + taskId).value.trim(),
+      mk_vezba: document.getElementById('pub-mkd-' + taskId).value.trim(),
+      shb_naslov: document.getElementById('pub-shbt-' + taskId).value.trim(),
+      shb_vezba: document.getElementById('pub-shbd-' + taskId).value.trim()
+    };
+
+    showToast("⏳ Се зачувуваат промените...");
+    callBackend('updateTask', { taskData: updated }, function() {
+      showToast("✅ Промените се успешно зачувани во базата!");
+      loadApprovedTasks(renderPublishedTasksEditor);
+    });
+  }
+
+  function deletePublishedTask(taskId) {
+    if (!confirm("Дали сте сигурни дека сакате трајно да ја избришете оваа вежба од базата?")) return;
+    callBackend('deleteTask', { taskId: taskId }, function() {
+      showToast("🗑️ Вежбата е избришана од базата.");
+      loadApprovedTasks(renderPublishedTasksEditor);
+    });
   }
 
   document.addEventListener('mouseup', function(e) {
@@ -1195,6 +1277,7 @@
       item._saved = true;
       renderTaskPills();
       showToast("🎉 Вежбата е зачувана во базата!");
+      loadApprovedTasks();
       if (currentIndex + 1 < extractedTasks.length) selectTask(currentIndex + 1);
     });
   }
