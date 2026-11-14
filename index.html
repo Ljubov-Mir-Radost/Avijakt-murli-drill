@@ -258,14 +258,6 @@
     </div>
   </header>
 
-  <!-- ЕДНОКРАТНО ПОВРЗУВАЊЕ СО GOOGLE ТАБЕЛАТА -->
-  <div id="setup-url-banner" class="panel-card hidden" style="border: 2px solid var(--primary);">
-    <h3 style="margin-top:0; color:var(--primary);">🔗 Поврзи ја апликацијата со твојот Google Sheet (Еднократно)</h3>
-    <p style="font-size:13.5px; color:var(--muted);">Залепи го твојот <b>Web App URL</b> линк од Google Apps Script (тој што завршува на <code>/exec</code>):</p>
-    <input type="text" id="input-script-url" placeholder="https://script.google.com/macros/s/.../exec">
-    <button class="btn btn-primary" onclick="saveScriptUrl()">✅ Зачувај и Поврзи</button>
-  </div>
-
   <!-- ========================================================= -->
   <!-- 1. КОРИСНИЧКИ ДЕЛ (ДЕНЕС + ВИЗУЕЛЕН КАЛЕНДАР + АРХИВА)    -->
   <!-- ========================================================= -->
@@ -347,7 +339,6 @@
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:10px;">
         <h2 style="margin:0; font-size:18px; color:var(--primary);">✨ Уреднички Панел - Внес и превод на Авијакт Мурли</h2>
         <div style="display:flex; gap:8px; flex-wrap:wrap;">
-          <button class="btn" onclick="changeScriptUrl()">🔗 Промени API линк</button>
           <button class="btn" onclick="toggleGlossary()">📖 Правилник за превод</button>
           <button class="btn" onclick="toggleEditorMode()">⬅ Назад кон Апликацијата</button>
         </div>
@@ -446,9 +437,9 @@
 </div>
 
 <script>
-  var SCRIPT_URL = localStorage.getItem('bk_script_url') || '';
-  const EDITOR_PIN = '108';
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzebDVzhxqfBI7dZWJh-xOSAMZQ9gBvRTnwUKNKCh3l3O3UgCWSZPVloe5377BBSSQBiQ/exec";
 
+  var sessionPin = sessionStorage.getItem('bk_editor_pin') || '';
   var appLang = localStorage.getItem('bk_lang') || 'mk';
   var userTab = 'active';
   var serverTasks = [];
@@ -465,7 +456,6 @@
   var selectedSnippetCache = "";
   var deferredPrompt = null;
 
-  // ЦЕНТРАЛЕН РЕЧНИК ЗА ЦЕЛОСНА ДВОЈАЗИЧНОСТ
   const I18N = {
     mk: {
       mainTitle: "Авијакт Мурли Практики",
@@ -572,36 +562,12 @@
     window._toastTimer = setTimeout(function() { box.classList.add('hidden'); }, 2600);
   }
 
-  function saveScriptUrl() {
-    var val = document.getElementById('input-script-url').value.trim();
-    if (!val || val.indexOf('https://script.google.com') !== 0) {
-      return alert("Внесете валиден линк што почнува со https://script.google.com...");
-    }
-    SCRIPT_URL = val;
-    localStorage.setItem('bk_script_url', SCRIPT_URL);
-    document.getElementById('setup-url-banner').classList.add('hidden');
-    loadApprovedTasks();
-  }
-
-  function changeScriptUrl() {
-    var nv = prompt("Google Apps Script Web App URL (/exec):", SCRIPT_URL);
-    if (nv && nv.trim()) {
-      SCRIPT_URL = nv.trim();
-      localStorage.setItem('bk_script_url', SCRIPT_URL);
-      loadApprovedTasks();
-    }
-  }
-
-  // ЧИСТ FETCH ПОВИК БЕЗ CORS ПРЕФЛАЈТ БЛОКАДИ
+  // ЗАШТИТЕН ПОВИК КОН СЕРВЕРОТ СО ПИН АВТЕНТИКАЦИЈА
   function callBackend(action, payload, onSuccess, onError) {
-    if (!SCRIPT_URL) {
-      document.getElementById('setup-url-banner').classList.remove('hidden');
-      return;
-    }
     fetch(SCRIPT_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify(Object.assign({ action: action }, payload || {}))
+      body: JSON.stringify(Object.assign({ action: action, pin: sessionPin }, payload || {}))
     })
     .then(function(r) { return r.json(); })
     .then(function(res) {
@@ -616,11 +582,6 @@
   }
 
   function loadApprovedTasks() {
-    if (!SCRIPT_URL) {
-      document.getElementById('user-loading').classList.add('hidden');
-      document.getElementById('setup-url-banner').classList.remove('hidden');
-      return;
-    }
     document.getElementById('user-loading').classList.remove('hidden');
     fetch(SCRIPT_URL + "?api=1")
       .then(function(r) { return r.json(); })
@@ -631,7 +592,7 @@
         refreshAllUserViews();
       })
       .catch(function() {
-        document.getElementById('user-loading').innerText = "Не може да се вчитаат вежбите. Проверете го API линкот во Уредник.";
+        document.getElementById('user-loading').innerText = "Се вчитува врската со базата на вежби...";
       });
   }
 
@@ -849,7 +810,6 @@
     renderSelectedDayPanel();
   }
 
-  // ФИЛТРИРАН ПРЕГЛЕД САМО ЗА ВЕЖБИТЕ ШТО ПРИПАЃААТ НА ИЗБРАНИОТ ДАТУМ ВО КАЛЕНДАРОТ
   function renderSelectedDayPanel() {
     var L = I18N[appLang];
     var todayISO = getLocalISODate(new Date());
@@ -976,14 +936,23 @@
     document.getElementById('btn-theme').innerText = (next === 'dark') ? '☀️ Светла' : '🌙 Темна';
   }
 
+  // СЕРВЕРСКА ПРОВЕРКА НА ТАЈНИОТ ПИН ЗА УРЕДНИКОТ
   function toggleEditorMode() {
     var ed = document.getElementById('editor-view');
     var us = document.getElementById('user-view');
     if (ed.classList.contains('hidden')) {
-      var pin = prompt("Внесете уреднички ПИН (стандардно: 108):");
-      if (pin !== EDITOR_PIN) return alert("Погрешен ПИН!");
-      us.classList.add('hidden');
-      ed.classList.remove('hidden');
+      var pin = prompt("Внесете уреднички ПИН:");
+      if (!pin) return;
+      sessionPin = pin.trim();
+      callBackend('verifyPin', {}, function() {
+        sessionStorage.setItem('bk_editor_pin', sessionPin);
+        us.classList.add('hidden');
+        ed.classList.remove('hidden');
+      }, function(err) {
+        sessionPin = '';
+        sessionStorage.removeItem('bk_editor_pin');
+        alert(err.message || "Погрешен уреднички ПИН!");
+      });
     } else {
       ed.classList.add('hidden');
       us.classList.remove('hidden');
@@ -991,7 +960,6 @@
     }
   }
 
-  // ЛЕБДЕЧКО МЕНИ ВО УРЕДНИКОТ
   document.addEventListener('mouseup', function(e) {
     var menu = document.getElementById('floating-selection-menu');
     var reader = document.getElementById('murli-paragraphs-container');
