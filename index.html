@@ -41,7 +41,6 @@
     .container { max-width: 1180px; margin: 0 auto; }
     .hidden { display: none !important; }
 
-    /* ХЕДЕР */
     .header {
       background: var(--card); border: 1px solid var(--border); border-radius: 16px;
       padding: 14px 18px; display: flex; justify-content: space-between; align-items: center;
@@ -65,7 +64,6 @@
     .btn-sm { padding: 6px 10px; font-size: 12px; border-radius: 7px; }
     .btn.active { background: var(--primary); color: #000; border-color: var(--primary); }
 
-    /* НАВИГАЦИЈА (ДЕСКТОП ГОРЕ, МОБИЛЕН ДОЛУ) */
     .nav-tabs { display: flex; gap: 8px; margin-bottom: 18px; }
     .nav-tab {
       flex: 1; text-align: center; padding: 12px 16px; border-radius: 12px;
@@ -86,7 +84,6 @@
       .brand-title { font-size: 16px; }
     }
 
-    /* СТАТИСТИКА */
     .stats-bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 18px; }
     .stat-box {
       background: var(--card); border: 1px solid var(--border); border-radius: 12px;
@@ -102,7 +99,6 @@
       .stat-lbl { font-size: 11px; }
     }
 
-    /* КАРТИЧКИ ЗА ВЕЖБИ */
     .tasks-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 16px; }
     @media (max-width: 480px) { .tasks-grid { grid-template-columns: 1fr; } }
 
@@ -120,7 +116,6 @@
     .task-title { font-size: 17px; font-weight: 700; margin: 0 0 10px 0; color: var(--text); }
     .task-body { font-size: 14px; line-height: 1.65; color: var(--text); white-space: pre-line; margin-bottom: 16px; }
 
-    /* ПРОГРЕС И 7-ДНЕВНИ ТОЧКИ */
     .progress-section {
       background: var(--card-alt); border: 1px solid var(--border); border-radius: 10px;
       padding: 10px 12px; margin-bottom: 14px;
@@ -138,7 +133,6 @@
     .day-dot.is-today { outline: 2px solid var(--primary); }
     .task-footer { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
 
-    /* КАЛЕНДАР (ТАБ 2) */
     .calendar-layout { display: grid; grid-template-columns: 7fr 5fr; gap: 18px; align-items: start; }
     @media (max-width: 860px) { .calendar-layout { grid-template-columns: 1fr; } }
 
@@ -168,11 +162,9 @@
       .cal-day-num { font-size: 12px; }
     }
 
-    /* АРХИВА (ТАБ 3) */
     .archive-group { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px; margin-bottom: 16px; box-shadow: var(--shadow); }
     .archive-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 12px; }
 
-    /* УРЕДНИК */
     .panel-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px; box-shadow: var(--shadow); margin-bottom: 16px; }
     label { display: block; font-weight: 600; margin-bottom: 5px; font-size: 13px; color: var(--muted); }
     input[type="text"], input[type="number"], textarea {
@@ -221,10 +213,9 @@
 </div>
 
 <div class="container">
-  <!-- ГОРЕН ХЕДЕР СО ШИВ БАБА ЛОГО -->
   <header class="header">
     <div class="brand">
-      <svg class="shiv-baba-logo" viewBox="0 0 100 100" xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)">
+      <svg class="shiv-baba-logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <radialGradient id="babaAura" cx="50%" cy="50%" r="50%">
             <stop offset="0%" stop-color="#ffffff"/>
@@ -258,9 +249,7 @@
     </div>
   </header>
 
-  <!-- ========================================================= -->
-  <!-- 1. КОРИСНИЧКИ ДЕЛ (ДЕНЕС + ВИЗУЕЛЕН КАЛЕНДАР + АРХИВА)    -->
-  <!-- ========================================================= -->
+  <!-- 1. КОРИСНИЧКИ ДЕЛ -->
   <div id="user-view">
     <div class="stats-bar">
       <div class="stat-box">
@@ -296,12 +285,10 @@
       ⏳ Се вчитуваат духовните вежби...
     </div>
 
-    <!-- ЕКРАН 1: АКТИВНИ ДЕНЕС -->
     <div id="view-tab-active">
       <div id="user-tasks-container" class="tasks-grid"></div>
     </div>
 
-    <!-- ЕКРАН 2: ИНТЕРАКТИВЕН КАЛЕНДАР -->
     <div id="view-tab-calendar" class="hidden">
       <div class="calendar-layout">
         <div class="cal-box">
@@ -325,15 +312,12 @@
       </div>
     </div>
 
-    <!-- ЕКРАН 3: АРХИВА -->
     <div id="view-tab-archive" class="hidden">
       <div id="archive-container"></div>
     </div>
   </div>
 
-  <!-- ========================================================= -->
-  <!-- 2. УРЕДНИЧКИ ПАНЕЛ                                        -->
-  <!-- ========================================================= -->
+  <!-- 2. УРЕДНИЧКИ ПАНЕЛ -->
   <div id="editor-view" class="hidden">
     <div class="panel-card">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:10px;">
@@ -341,11 +325,11 @@
         <div style="display:flex; gap:8px; flex-wrap:wrap;">
           <button class="btn btn-primary" onclick="togglePublishedManager()">✏️ Уреди објавени вежби</button>
           <button class="btn" onclick="toggleGlossary()">📖 Правилник за превод</button>
+          <button class="btn" onclick="changeScriptUrl()">🔗 Промени API линк</button>
           <button class="btn" onclick="toggleEditorMode()">⬅ Назад кон Апликацијата</button>
         </div>
       </div>
 
-      <!-- ПАНЕЛ ЗА УРЕДУВАЊЕ И БРИШЕЊЕ НА ВЕЌЕ ОБЈАВЕНИ ВЕЖБИ -->
       <div id="published-tasks-panel" class="panel-card hidden" style="background:var(--card-alt); border:2px solid var(--primary);">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
           <strong style="color:var(--primary); font-size:16px;">✏️ Уреди или избриши веќе објавени вежби од базата:</strong>
@@ -354,7 +338,6 @@
         <div id="published-tasks-list"></div>
       </div>
 
-      <!-- ПРАВИЛНИК -->
       <div id="glossary-panel" class="panel-card hidden" style="background:var(--card-alt);">
         <strong>Додај нов термин во Правилникот:</strong>
         <div class="grid-2" style="grid-template-columns: 1fr 1fr 1fr auto; gap:8px; margin-top:10px; align-items:end;">
@@ -366,7 +349,6 @@
         <div id="glossary-items" style="max-height:130px; overflow-y:auto; font-size:13px; margin-top:10px;"></div>
       </div>
 
-      <!-- ЧЕКОР 1: ВНЕС НА НОВО МУРЛИ -->
       <div id="step-1">
         <label>Датум на Авијакт Мурли:</label>
         <input type="text" id="murli-date" value="15.11.2026" style="max-width:220px;">
@@ -393,7 +375,6 @@
         </div>
       </div>
 
-      <!-- ЧЕКОР 2: РАБОТЕН ПРОСТОР -->
       <div id="step-2" class="hidden">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
           <span style="font-size:13px; color:var(--primary);">💡 Селектирај кој било дел од текстот лево со глувчето за да се појави лебдечкото копче!</span>
@@ -450,7 +431,8 @@
 </div>
 
 <script>
-  const SCRIPT_URL = "[https://script.google.com/macros/s/AKfycbzebDVzhxqfBI7dZWJh-xOSAMZQ9gBvRTnwUKNKCh3l3O3UgCWSZPVloe5377BBSSQBiQ/exec](https://script.google.com/macros/s/AKfycbzebDVzhxqfBI7dZWJh-xOSAMZQ9gBvRTnwUKNKCh3l3O3UgCWSZPVloe5377BBSSQBiQ/exec)";
+  const DEFAULT_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzebDVzhxqfBI7dZWJh-xOSAMZQ9gBvRTnwUKNKCh3l3O3UgCWSZPVloe5377BBSSQBiQ/exec";
+  var SCRIPT_URL = localStorage.getItem('bk_script_url') || DEFAULT_SCRIPT_URL;
 
   var sessionPin = sessionStorage.getItem('bk_editor_pin') || '';
   var appLang = localStorage.getItem('bk_lang') || 'mk';
@@ -575,6 +557,15 @@
     window._toastTimer = setTimeout(function() { box.classList.add('hidden'); }, 2600);
   }
 
+  function changeScriptUrl() {
+    var nv = prompt("Внесете Google Apps Script Web App URL (/exec):", SCRIPT_URL);
+    if (nv && nv.trim()) {
+      SCRIPT_URL = nv.trim();
+      localStorage.setItem('bk_script_url', SCRIPT_URL);
+      loadApprovedTasks();
+    }
+  }
+
   function callBackend(action, payload, onSuccess, onError) {
     fetch(SCRIPT_URL, {
       method: 'POST',
@@ -593,19 +584,39 @@
     });
   }
 
+  // ДВОЕН МЕХАНИЗАМ ЗА ВЧИТУВАЊЕ (FETCH + АВТОМАТСКИ JSONP FALLBACK)
+  function onTasksDataReceived(data, callback) {
+    document.getElementById('user-loading').classList.add('hidden');
+    serverTasks = Array.isArray(data) ? data : [];
+    initDefaultProgress();
+    refreshAllUserViews();
+    if (callback) callback();
+  }
+
   function loadApprovedTasks(callback) {
-    document.getElementById('user-loading').classList.remove('hidden');
-    fetch(SCRIPT_URL + "?api=1")
+    var loader = document.getElementById('user-loading');
+    loader.innerText = "⏳ Се вчитуваат духовните вежби...";
+    loader.classList.remove('hidden');
+
+    var url = SCRIPT_URL + "?api=1&t=" + new Date().getTime();
+
+    fetch(url, { method: 'GET', redirect: 'follow' })
       .then(function(r) { return r.json(); })
       .then(function(data) {
-        document.getElementById('user-loading').classList.add('hidden');
-        serverTasks = data || [];
-        initDefaultProgress();
-        refreshAllUserViews();
-        if (callback) callback();
+        onTasksDataReceived(data, callback);
       })
       .catch(function() {
-        document.getElementById('user-loading').innerText = "Се вчитува врската со базата на вежби...";
+        // Резервен JSONP повик (заобиколува секаква CORS или Service Worker блокада)
+        window.__bkJsonpCallback = function(data) {
+          onTasksDataReceived(data, callback);
+        };
+        var s = document.createElement('script');
+        s.src = SCRIPT_URL + "?api=1&callback=__bkJsonpCallback&t=" + new Date().getTime();
+        s.onerror = function() {
+          loader.innerHTML = "⚠️ Врската со табелата не успеа. Проверете во Apps Script дали во <b>Deploy > Manage deployments > Edit</b> е избрано <b>New version</b> и <b>Who has access: Anyone</b>.<br><br>" +
+            "<button class='btn btn-sm btn-primary' onclick='changeScriptUrl()'>🔗 Промени / Провери API линк</button>";
+        };
+        document.body.appendChild(s);
       });
   }
 
@@ -938,7 +949,7 @@
     document.getElementById('cal-legend-active').innerText = L.legendActive;
 
     setReaderLang(lang);
-    refreshAllUserViews();
+    if (serverTasks.length > 0) refreshAllUserViews();
   }
 
   function toggleTheme() {
@@ -972,7 +983,6 @@
     }
   }
 
-  // ПАНЕЛ ЗА УРЕДУВАЊЕ И БРИШЕЊЕ НА ВЕЌЕ ОБЈАВЕНИ ВЕЖБИ
   function togglePublishedManager() {
     var p = document.getElementById('published-tasks-panel');
     p.classList.toggle('hidden');
@@ -1295,8 +1305,11 @@
     document.getElementById('step-1').classList.remove('hidden');
   }
 
+  // Чистење на стар Service Worker кеш што може да блокира повици кон Google
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js').catch(function(){});
+    navigator.serviceWorker.getRegistrations().then(function(regs) {
+      regs.forEach(function(reg) { reg.unregister(); });
+    });
   }
   window.addEventListener('beforeinstallprompt', function(e) {
     e.preventDefault();
