@@ -2,21 +2,22 @@
 <html lang="mk" data-theme="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="theme-color" content="#0b1120">
   <title>Авијакт Мурли - Практики и Календар</title>
   <link rel="manifest" href="manifest.json">
   <style>
     :root[data-theme="light"] {
-      --bg: #f8fafc;
+      --bg: #f1f5f9;
       --card: #ffffff;
-      --card-alt: #f1f5f9;
+      --card-alt: #f8fafc;
       --text: #0f172a;
       --muted: #64748b;
-      --border: #e2e8f0;
+      --border: #cbd5e1;
       --primary: #d97706;
-      --primary-bg: #fffbeb;
+      --primary-bg: #fef3c7;
       --success: #059669;
+      --success-bg: #d1fae5;
       --danger: #dc2626;
       --shadow: 0 4px 15px rgba(0,0,0,0.06);
     }
@@ -24,107 +25,165 @@
       --bg: #0b1120;
       --card: #1e293b;
       --card-alt: #0f172a;
-      --text: #f1f5f9;
+      --text: #f8fafc;
       --muted: #94a3b8;
       --border: #334155;
       --primary: #f59e0b;
-      --primary-bg: rgba(245, 158, 11, 0.14);
+      --primary-bg: rgba(245, 158, 11, 0.16);
       --success: #10b981;
+      --success-bg: rgba(16, 185, 129, 0.18);
       --danger: #ef4444;
-      --shadow: 0 6px 20px rgba(0,0,0,0.4);
+      --shadow: 0 6px 22px rgba(0,0,0,0.45);
     }
 
-    * { box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
-    body { background: var(--bg); color: var(--text); margin: 0; padding: 14px; transition: background 0.25s, color 0.25s; }
+    * { box-sizing: border-box; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+    body { background: var(--bg); color: var(--text); margin: 0; padding: 12px; padding-bottom: 84px; transition: background 0.2s, color 0.2s; }
     .container { max-width: 1180px; margin: 0 auto; }
+    .hidden { display: none !important; }
 
+    /* ХЕДЕР */
     .header {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 14px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: var(--shadow);
-      margin-bottom: 18px;
-      flex-wrap: wrap;
-      gap: 12px;
+      background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+      padding: 14px 18px; display: flex; justify-content: space-between; align-items: center;
+      box-shadow: var(--shadow); margin-bottom: 16px; flex-wrap: wrap; gap: 12px;
     }
-    .brand { display: flex; align-items: center; gap: 14px; }
-    .shiv-baba-logo {
-      width: 48px;
-      height: 48px;
-      flex-shrink: 0;
-      filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.6));
-    }
-    .brand-title { font-size: 19px; font-weight: 700; margin: 0; color: var(--primary); }
-    .brand-sub { font-size: 12.5px; color: var(--muted); margin: 2px 0 0 0; }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .shiv-baba-logo { width: 46px; height: 46px; flex-shrink: 0; filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.65)); }
+    .brand-title { font-size: 18px; font-weight: 700; margin: 0; color: var(--primary); }
+    .brand-sub { font-size: 12px; color: var(--muted); margin: 2px 0 0 0; }
 
-    .controls { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .controls { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
     .btn {
-      padding: 8px 14px;
-      border-radius: 9px;
-      border: 1px solid var(--border);
-      background: var(--card-alt);
-      color: var(--text);
-      font-weight: 600;
-      font-size: 13px;
-      cursor: pointer;
-      transition: 0.2s;
+      padding: 8px 13px; border-radius: 9px; border: 1px solid var(--border);
+      background: var(--card-alt); color: var(--text); font-weight: 600; font-size: 13px;
+      cursor: pointer; transition: 0.18s; display: inline-flex; align-items: center; gap: 5px;
     }
-    .btn:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn:hover { border-color: var(--primary); }
     .btn-primary { background: var(--primary); color: #000; border-color: var(--primary); font-weight: 700; }
-    .btn-success { background: var(--success); color: #fff; border-color: var(--success); }
+    .btn-success { background: var(--success); color: #fff; border-color: var(--success); font-weight: 700; }
     .btn-danger { background: var(--danger); color: #fff; border-color: var(--danger); }
-    .btn-sm { padding: 5px 10px; font-size: 12px; border-radius: 6px; }
+    .btn-sm { padding: 6px 10px; font-size: 12px; border-radius: 7px; }
     .btn.active { background: var(--primary); color: #000; border-color: var(--primary); }
 
-    .nav-tabs { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
+    /* НАВИГАЦИЈА (ДЕСКТОП ГОРЕ, МОБИЛЕН ДОЛУ) */
+    .nav-tabs { display: flex; gap: 8px; margin-bottom: 18px; }
     .nav-tab {
-      padding: 10px 18px;
-      border-radius: 12px;
-      background: var(--card);
-      border: 1px solid var(--border);
-      color: var(--muted);
-      font-weight: 600;
-      cursor: pointer;
-      font-size: 14px;
+      flex: 1; text-align: center; padding: 12px 16px; border-radius: 12px;
+      background: var(--card); border: 1px solid var(--border); color: var(--muted);
+      font-weight: 700; cursor: pointer; font-size: 14px; transition: 0.2s;
     }
     .nav-tab.active {
-      background: var(--primary-bg);
-      color: var(--primary);
-      border-color: var(--primary);
+      background: var(--primary-bg); color: var(--primary); border-color: var(--primary);
     }
 
-    .tasks-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; }
+    @media (max-width: 680px) {
+      .nav-tabs {
+        position: fixed; bottom: 0; left: 0; right: 0; margin: 0; padding: 8px 10px;
+        background: var(--card); border-top: 1px solid var(--border); z-index: 900;
+        box-shadow: 0 -4px 15px rgba(0,0,0,0.3); border-radius: 16px 16px 0 0;
+      }
+      .nav-tab { padding: 10px 6px; font-size: 12.5px; border-radius: 10px; }
+      .brand-title { font-size: 16px; }
+    }
+
+    /* СТАТИСТИКА */
+    .stats-bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 18px; }
+    .stat-box {
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      padding: 12px 14px; display: flex; align-items: center; gap: 12px; box-shadow: var(--shadow);
+    }
+    .stat-icon { font-size: 24px; }
+    .stat-val { font-size: 18px; font-weight: 800; color: var(--primary); }
+    .stat-lbl { font-size: 12px; color: var(--muted); }
+    @media (max-width: 680px) {
+      .stats-bar { gap: 8px; }
+      .stat-box { padding: 10px; flex-direction: column; text-align: center; gap: 4px; }
+      .stat-val { font-size: 16px; }
+      .stat-lbl { font-size: 11px; }
+    }
+
+    /* КАРТИЧКИ ЗА ВЕЖБИ */
+    .tasks-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 16px; }
+    @media (max-width: 480px) { .tasks-grid { grid-template-columns: 1fr; } }
+
     .task-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 18px;
-      box-shadow: var(--shadow);
-      display: flex;
-      flex-direction: column;
+      background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+      padding: 18px; box-shadow: var(--shadow); display: flex; flex-direction: column;
       justify-content: space-between;
     }
-    .task-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 12px; color: var(--muted); }
-    .murli-badge { background: var(--primary-bg); color: var(--primary); padding: 3px 10px; border-radius: 99px; font-weight: 700; }
+    .task-card.done-today { border-color: var(--success); }
+    .task-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 12px; color: var(--muted); flex-wrap: wrap; gap: 6px; }
+    .murli-badge { background: var(--primary-bg); color: var(--primary); padding: 4px 10px; border-radius: 99px; font-weight: 700; }
+    .deadline-badge { background: var(--card-alt); border: 1px solid var(--border); padding: 4px 10px; border-radius: 99px; font-weight: 600; }
+    .deadline-badge.extended { border-color: var(--primary); color: var(--primary); }
+
     .task-title { font-size: 17px; font-weight: 700; margin: 0 0 10px 0; color: var(--text); }
     .task-body { font-size: 14px; line-height: 1.65; color: var(--text); white-space: pre-line; margin-bottom: 16px; }
-    .task-footer { border-top: 1px solid var(--border); padding-top: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
 
-    .panel-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; box-shadow: var(--shadow); margin-bottom: 18px; }
-    label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 13.5px; color: var(--muted); }
+    /* ПРОГРЕС И 7-ДНЕВНИ ТОЧКИ */
+    .progress-section {
+      background: var(--card-alt); border: 1px solid var(--border); border-radius: 10px;
+      padding: 10px 12px; margin-bottom: 14px;
+    }
+    .progress-header { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px; font-weight: 600; }
+    .progress-bar-bg { height: 7px; background: var(--border); border-radius: 99px; overflow: hidden; margin-bottom: 10px; }
+    .progress-bar-fill { height: 100%; background: var(--success); border-radius: 99px; transition: width 0.3s; }
+
+    .week-dots { display: flex; justify-content: space-between; align-items: center; gap: 4px; }
+    .day-dot {
+      flex: 1; text-align: center; padding: 5px 2px; border-radius: 7px; font-size: 11px;
+      background: var(--card); border: 1px solid var(--border); color: var(--muted); cursor: pointer;
+    }
+    .day-dot.practiced { background: var(--success-bg); border-color: var(--success); color: var(--success); font-weight: 700; }
+    .day-dot.is-today { outline: 2px solid var(--primary); }
+    .task-footer { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+
+    /* КАЛЕНДАР (ТАБ 2) */
+    .calendar-layout { display: grid; grid-template-columns: 7fr 5fr; gap: 18px; align-items: start; }
+    @media (max-width: 860px) { .calendar-layout { grid-template-columns: 1fr; } }
+
+    .cal-box { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 18px; box-shadow: var(--shadow); }
+    .cal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+    .cal-month-title { font-size: 18px; font-weight: 800; color: var(--primary); }
+
+    .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+    .cal-dow { text-align: center; font-size: 12px; font-weight: 700; color: var(--muted); padding-bottom: 6px; }
+    .cal-cell {
+      min-height: 62px; background: var(--card-alt); border: 1px solid var(--border);
+      border-radius: 10px; padding: 6px; cursor: pointer; display: flex; flex-direction: column;
+      justify-content: space-between; transition: 0.15s;
+    }
+    .cal-cell:hover { border-color: var(--primary); }
+    .cal-cell.empty { background: transparent; border-color: transparent; cursor: default; }
+    .cal-cell.today { border: 2px solid var(--primary); }
+    .cal-cell.selected { background: var(--primary-bg); border-color: var(--primary); }
+    .cal-day-num { font-size: 13px; font-weight: 700; }
+    .cal-indicators { display: flex; gap: 4px; flex-wrap: wrap; align-items: center; }
+    .ind-dot-done { width: 8px; height: 8px; border-radius: 50%; background: var(--success); display: inline-block; }
+    .ind-bar-active { height: 4px; width: 100%; border-radius: 4px; background: var(--primary); opacity: 0.75; }
+
+    @media (max-width: 520px) {
+      .cal-grid { gap: 4px; }
+      .cal-cell { min-height: 48px; padding: 4px; border-radius: 8px; }
+      .cal-day-num { font-size: 12px; }
+    }
+
+    /* АРХИВА (ТАБ 3) */
+    .archive-group { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px; margin-bottom: 16px; box-shadow: var(--shadow); }
+    .archive-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 12px; }
+
+    /* УРЕДНИК */
+    .panel-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px; box-shadow: var(--shadow); margin-bottom: 16px; }
+    label { display: block; font-weight: 600; margin-bottom: 5px; font-size: 13px; color: var(--muted); }
     input[type="text"], input[type="number"], textarea {
       width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px;
       background: var(--card-alt); color: var(--text); font-size: 14px; margin-bottom: 12px; line-height: 1.5;
     }
-    .workspace-grid { display: grid; grid-template-columns: 6fr 6fr; gap: 20px; align-items: start; }
+    .workspace-grid { display: grid; grid-template-columns: 6fr 6fr; gap: 18px; align-items: start; }
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     @media (max-width: 920px) { .workspace-grid, .grid-2 { grid-template-columns: 1fr; } }
 
-    .murli-reader { background: var(--card-alt); border: 1px solid var(--border); border-radius: 10px; padding: 14px; max-height: 740px; overflow-y: auto; }
+    .murli-reader { background: var(--card-alt); border: 1px solid var(--border); border-radius: 10px; padding: 14px; max-height: 700px; overflow-y: auto; }
     .para-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 14px; margin-bottom: 12px; font-size: 14px; line-height: 1.65; }
     .para-card.ai-picked { border-left: 4px solid var(--primary); background: var(--primary-bg); }
     .para-header { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 12px; font-weight: 700; color: var(--muted); }
@@ -134,7 +193,11 @@
     .task-pill.active { background: var(--primary); color: #000; border-color: var(--primary); }
     .task-pill.saved { border-color: var(--success); color: var(--success); }
 
-    .hidden { display: none !important; }
+    #toast-box {
+      position: fixed; bottom: 75px; right: 20px; z-index: 9999;
+      background: var(--success); color: #fff; padding: 12px 18px; border-radius: 10px;
+      font-weight: 700; font-size: 13.5px; box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+    }
 
     #floating-selection-menu {
       position: fixed; z-index: 9999; background: #0f172a; color: #fff;
@@ -150,12 +213,15 @@
 </head>
 <body>
 
+<div id="toast-box" class="hidden"></div>
+
 <div id="floating-selection-menu" class="hidden">
   <button onmousedown="handleSelectionAction('append', event)">📎 Додај во тековната вежба</button>
   <button onmousedown="handleSelectionAction('new', event)">➕ Нова вежба од селектираното</button>
 </div>
 
 <div class="container">
+  <!-- ГОРЕН ХЕДЕР СО ШИВ БАБА ЛОГО -->
   <header class="header">
     <div class="brand">
       <svg class="shiv-baba-logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -184,7 +250,7 @@
     </div>
 
     <div class="controls">
-      <button class="btn hidden" id="btn-install-pwa" onclick="installPWA()">📲 Инсталирај Апликација</button>
+      <button class="btn hidden" id="btn-install-pwa" onclick="installPWA()">📲 Инсталирај</button>
       <button class="btn active" id="lang-mk" onclick="switchAppLang('mk')">🇲🇰 МК</button>
       <button class="btn" id="lang-shb" onclick="switchAppLang('shb')">🇷🇸/🇭🇷/🇧🇦 SHB</button>
       <button class="btn" onclick="toggleTheme()" id="btn-theme">☀️ Светла</button>
@@ -192,7 +258,7 @@
     </div>
   </header>
 
-  <!-- ПОЛЕ ЗА АВТОМАТСКО ПОВРЗУВАЊЕ СО GOOGLE ТАБЕЛАТА (Се појавува само ако не е внесен линкот) -->
+  <!-- ЕДНОКРАТНО ПОВРЗУВАЊЕ СО GOOGLE ТАБЕЛАТА -->
   <div id="setup-url-banner" class="panel-card hidden" style="border: 2px solid var(--primary);">
     <h3 style="margin-top:0; color:var(--primary);">🔗 Поврзи ја апликацијата со твојот Google Sheet (Еднократно)</h3>
     <p style="font-size:13.5px; color:var(--muted);">Залепи го твојот <b>Web App URL</b> линк од Google Apps Script (тој што завршува на <code>/exec</code>):</p>
@@ -200,22 +266,82 @@
     <button class="btn btn-primary" onclick="saveScriptUrl()">✅ Зачувај и Поврзи</button>
   </div>
 
-  <!-- 1. КОРИСНИЧКИ ДЕЛ -->
+  <!-- ========================================================= -->
+  <!-- 1. КОРИСНИЧКИ ДЕЛ (ДЕНЕС + ВИЗУЕЛЕН КАЛЕНДАР + АРХИВА)    -->
+  <!-- ========================================================= -->
   <div id="user-view">
+    <div class="stats-bar">
+      <div class="stat-box">
+        <span class="stat-icon">🔥</span>
+        <div>
+          <div class="stat-val" id="stat-active-count">0</div>
+          <div class="stat-lbl" id="lbl-stat-active">Активни вежби</div>
+        </div>
+      </div>
+      <div class="stat-box">
+        <span class="stat-icon">✨</span>
+        <div>
+          <div class="stat-val" id="stat-today-done">0 / 0</div>
+          <div class="stat-lbl" id="lbl-stat-today">Практикувани денес</div>
+        </div>
+      </div>
+      <div class="stat-box">
+        <span class="stat-icon">🏆</span>
+        <div>
+          <div class="stat-val" id="stat-total-checkins">0</div>
+          <div class="stat-lbl" id="lbl-stat-total">Вкупно практикувања</div>
+        </div>
+      </div>
+    </div>
+
     <div class="nav-tabs">
-      <button class="nav-tab active" id="tab-active" onclick="setUserTab('active')">🔥 Активни денес</button>
-      <button class="nav-tab" id="tab-calendar" onclick="setUserTab('calendar')">📅 Мој Календар на рокови</button>
-      <button class="nav-tab" id="tab-all" onclick="setUserTab('all')">📚 Архива на сите Мурли</button>
+      <button class="nav-tab active" id="tab-active" onclick="setUserTab('active')">🔥 Денес</button>
+      <button class="nav-tab" id="tab-calendar" onclick="setUserTab('calendar')">📅 Календар</button>
+      <button class="nav-tab" id="tab-all" onclick="setUserTab('all')">📚 Архива на Мурли</button>
     </div>
 
     <div id="user-loading" class="panel-card" style="text-align:center;">
       ⏳ Се вчитуваат духовните вежби...
     </div>
 
-    <div id="user-tasks-container" class="tasks-grid"></div>
+    <!-- ЕКРАН 1: АКТИВНИ ДЕНЕС -->
+    <div id="view-tab-active">
+      <div id="user-tasks-container" class="tasks-grid"></div>
+    </div>
+
+    <!-- ЕКРАН 2: ИНТЕРАКТИВЕН КАЛЕНДАР -->
+    <div id="view-tab-calendar" class="hidden">
+      <div class="calendar-layout">
+        <div class="cal-box">
+          <div class="cal-header">
+            <button class="btn btn-sm" id="btn-cal-prev" onclick="changeCalendarMonth(-1)">◀ Претходен</button>
+            <span class="cal-month-title" id="cal-month-label"></span>
+            <button class="btn btn-sm" id="btn-cal-next" onclick="changeCalendarMonth(1)">Следен ▶</button>
+          </div>
+          <div class="cal-grid" id="cal-days-header"></div>
+          <div class="cal-grid" id="cal-grid-cells" style="margin-top:6px;"></div>
+          <div style="display:flex; gap:16px; margin-top:14px; font-size:12px; color:var(--muted); flex-wrap:wrap;">
+            <span style="display:flex; align-items:center; gap:6px;"><span class="ind-dot-done"></span> <span id="cal-legend-done">Практикувано</span></span>
+            <span style="display:flex; align-items:center; gap:6px;"><span style="width:18px; height:4px; background:var(--primary); display:inline-block; border-radius:4px;"></span> <span id="cal-legend-active">Активен рок</span></span>
+          </div>
+        </div>
+
+        <div class="cal-box">
+          <h3 style="margin-top:0; color:var(--primary); font-size:16px;" id="cal-selected-date-title"></h3>
+          <div id="cal-day-tasks-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ЕКРАН 3: АРХИВА -->
+    <div id="view-tab-archive" class="hidden">
+      <div id="archive-container"></div>
+    </div>
   </div>
 
-  <!-- 2. УРЕДНИЧКИ ПАНЕЛ -->
+  <!-- ========================================================= -->
+  <!-- 2. УРЕДНИЧКИ ПАНЕЛ                                        -->
+  <!-- ========================================================= -->
   <div id="editor-view" class="hidden">
     <div class="panel-card">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:10px;">
@@ -326,7 +452,11 @@
   var appLang = localStorage.getItem('bk_lang') || 'mk';
   var userTab = 'active';
   var serverTasks = [];
-  var userProgress = JSON.parse(localStorage.getItem('bk_progress') || '{}');
+  var userProgress = JSON.parse(localStorage.getItem('bk_progress_v2') || '{}');
+
+  var calYear = new Date().getFullYear();
+  var calMonth = new Date().getMonth();
+  var selectedCalDate = getLocalISODate(new Date());
 
   var readerLang = 'mk';
   var allParagraphs = [];
@@ -335,15 +465,117 @@
   var selectedSnippetCache = "";
   var deferredPrompt = null;
 
-  function isRunningInsideGoogle() {
-    return (typeof google !== 'undefined' && google.script && google.script.run);
+  // ЦЕНТРАЛЕН РЕЧНИК ЗА ЦЕЛОСНА ДВОЈАЗИЧНОСТ
+  const I18N = {
+    mk: {
+      mainTitle: "Авијакт Мурли Практики",
+      subTitle: "Ом Шанти • Календар на духовни вежби од БапДада",
+      tabActive: "🔥 Денес",
+      tabCal: "📅 Календар",
+      tabAll: "📚 Архива на Мурли",
+      statActive: "Активни вежби",
+      statToday: "Практикувани денес",
+      statTotal: "Вкупно практикувања",
+      noActive: "Немате активни вежби за денес. Отворете ја Архивата за да активирате вежба.",
+      progLabel: "Напредок на практиката:",
+      daysWord: "дена",
+      untilPrefix: "⏳ До: ",
+      remPrefix: " (уште ",
+      doneBtn: "✅ Практикувано денес (Поништи)",
+      todoBtn: "🙏 Означи: Практикував денес",
+      extendBtn: "⏳ +7 дена",
+      prevBtn: "◀ Претходен",
+      nextBtn: "Следен ▶",
+      legendDone: "Практикувано",
+      legendActive: "Активен рок",
+      calDateTitle: "📅 Вежби за датум: ",
+      noTasksOnDate: "Нема активни вежби за овој датум.",
+      doneOnDay: "✅ Практикувано на овој ден",
+      markOnDay: "☑️ Означи практикувано за овој ден",
+      archiveEmpty: "Архивата е празна.",
+      archiveGroupTitle: "📜 Авијакт Мурли од: ",
+      tasksCountWord: " вежби",
+      totalPracticed: "Вкупно практикувана: ",
+      timesWord: " пати • Рок до: ",
+      reactivateBtn: "🔄 Активирај одново за наредните 7 дена",
+      months: ['Јануари', 'Февруари', 'Март', 'Април', 'Мај', 'Јуни', 'Јули', 'Август', 'Септември', 'Октомври', 'Ноември', 'Декември'],
+      dowShort: ['Пон', 'Вто', 'Сре', 'Чет', 'Пет', 'Саб', 'Нед'],
+      dowSunFirst: ['Нед', 'Пон', 'Вто', 'Сре', 'Чет', 'Пет', 'Саб']
+    },
+    shb: {
+      mainTitle: "Avijakt Murli Prakse",
+      subTitle: "Om Šanti • Kalendar duhovnih vežbi od BapDade",
+      tabActive: "🔥 Danas",
+      tabCal: "📅 Kalendar",
+      tabAll: "📚 Arhiva Murlija",
+      statActive: "Aktivne vežbe",
+      statToday: "Praktikovane danas",
+      statTotal: "Ukupno praktikovanja",
+      noActive: "Nemate aktivnih vežbi za danas. Otvorite Arhivu da aktivirate vežbu.",
+      progLabel: "Napredak prakse:",
+      daysWord: "dana",
+      untilPrefix: "⏳ Do: ",
+      remPrefix: " (još ",
+      doneBtn: "✅ Praktikovano danas (Poništi)",
+      todoBtn: "🙏 Označi: Praktikovao/la sam danas",
+      extendBtn: "⏳ +7 dana",
+      prevBtn: "◀ Prethodni",
+      nextBtn: "Sledeći ▶",
+      legendDone: "Praktikovano",
+      legendActive: "Aktivni rok",
+      calDateTitle: "📅 Vežbe za datum: ",
+      noTasksOnDate: "Nema aktivnih vežbi za ovaj datum.",
+      doneOnDay: "✅ Praktikovano na ovaj dan",
+      markOnDay: "☑️ Označi praktikovano za ovaj dan",
+      archiveEmpty: "Arhiva je prazna.",
+      archiveGroupTitle: "📜 Avijakt Murli od: ",
+      tasksCountWord: " vežbi",
+      totalPracticed: "Ukupno praktikovana: ",
+      timesWord: " puta • Rok do: ",
+      reactivateBtn: "🔄 Aktiviraj ponovo za narednih 7 dana",
+      months: ['Januar', 'Februar', 'Mart', 'April', 'Maj', 'Jun', 'Jul', 'Avgust', 'Septembar', 'Oktobar', 'Novembar', 'Decembar'],
+      dowShort: ['Pon', 'Uto', 'Sre', 'Čet', 'Pet', 'Sub', 'Ned'],
+      dowSunFirst: ['Ned', 'Pon', 'Uto', 'Sre', 'Čet', 'Pet', 'Sub']
+    }
+  };
+
+  function getLocalISODate(d) {
+    return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, '0') + "-" + String(d.getDate()).padStart(2, '0');
+  }
+
+  function addDaysToISO(isoStr, daysToAdd) {
+    var p = String(isoStr).split('-');
+    var d = (p.length === 3) ? new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2])) : new Date();
+    if (isNaN(d.getTime())) d = new Date();
+    d.setDate(d.getDate() + Number(daysToAdd));
+    return getLocalISODate(d);
+  }
+
+  function formatPrettyDate(isoStr) {
+    if (!isoStr) return "";
+    var p = String(isoStr).split('-');
+    return (p.length === 3) ? (p[2] + "." + p[1] + "." + p[0]) : isoStr;
+  }
+
+  function daysBetweenISO(isoStart, isoEnd) {
+    var p1 = String(isoStart).split('-'), p2 = String(isoEnd).split('-');
+    var d1 = new Date(Number(p1[0]), Number(p1[1]) - 1, Number(p1[2]));
+    var d2 = new Date(Number(p2[0]), Number(p2[1]) - 1, Number(p2[2]));
+    return Math.round((d2 - d1) / 86400000);
+  }
+
+  function showToast(msg) {
+    var box = document.getElementById('toast-box');
+    box.innerText = msg;
+    box.classList.remove('hidden');
+    clearTimeout(window._toastTimer);
+    window._toastTimer = setTimeout(function() { box.classList.add('hidden'); }, 2600);
   }
 
   function saveScriptUrl() {
     var val = document.getElementById('input-script-url').value.trim();
     if (!val || val.indexOf('https://script.google.com') !== 0) {
-      alert("Внесете валиден линк што почнува со https://script.google.com...");
-      return;
+      return alert("Внесете валиден линк што почнува со https://script.google.com...");
     }
     SCRIPT_URL = val;
     localStorage.setItem('bk_script_url', SCRIPT_URL);
@@ -352,7 +584,7 @@
   }
 
   function changeScriptUrl() {
-    var nv = prompt("Внесете го вашиот Google Apps Script Web App URL (/exec):", SCRIPT_URL);
+    var nv = prompt("Google Apps Script Web App URL (/exec):", SCRIPT_URL);
     if (nv && nv.trim()) {
       SCRIPT_URL = nv.trim();
       localStorage.setItem('bk_script_url', SCRIPT_URL);
@@ -360,26 +592,15 @@
     }
   }
 
+  // ЧИСТ FETCH ПОВИК БЕЗ CORS ПРЕФЛАЈТ БЛОКАДИ
   function callBackend(action, payload, onSuccess, onError) {
-    if (isRunningInsideGoogle()) {
-      var runner = google.script.run.withSuccessHandler(onSuccess).withFailureHandler(onError || function(e){ alert(e.message); });
-      if (action === 'getGlossary') runner.getGlossaryFromSheet();
-      else if (action === 'addGlossary') runner.addGlossaryTermFromWeb(payload.en, payload.mk, payload.shb);
-      else if (action === 'analyzeMurli') runner.analyzeMurliFromWeb(payload.murliDate, payload.inputText);
-      else if (action === 'translateOnly') runner.getTranslatedParagraphsOnly(payload.inputText);
-      else if (action === 'translateSnippet') runner.translateSelectedSnippet(payload.snippet, payload.lang);
-      else if (action === 'buildPrompt') runner.buildPromptText(payload.inputText);
-      else if (action === 'saveTask') runner.saveApprovedTaskFromWeb(payload.taskData);
-      return;
-    }
-
     if (!SCRIPT_URL) {
       document.getElementById('setup-url-banner').classList.remove('hidden');
       return;
     }
-
     fetch(SCRIPT_URL, {
       method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify(Object.assign({ action: action }, payload || {}))
     })
     .then(function(r) { return r.json(); })
@@ -395,118 +616,318 @@
   }
 
   function loadApprovedTasks() {
-    if (!isRunningInsideGoogle() && !SCRIPT_URL) {
+    if (!SCRIPT_URL) {
       document.getElementById('user-loading').classList.add('hidden');
       document.getElementById('setup-url-banner').classList.remove('hidden');
       return;
     }
-
     document.getElementById('user-loading').classList.remove('hidden');
-    var fetchUrl = isRunningInsideGoogle() ? window.location.href.split('?')[0] + "?api=1" : SCRIPT_URL + "?api=1";
-
-    fetch(fetchUrl)
+    fetch(SCRIPT_URL + "?api=1")
       .then(function(r) { return r.json(); })
       .then(function(data) {
         document.getElementById('user-loading').classList.add('hidden');
         serverTasks = data || [];
         initDefaultProgress();
-        renderUserTasks();
+        refreshAllUserViews();
       })
       .catch(function() {
-        document.getElementById('user-loading').innerText = "Не може да се вчитаат вежбите. Проверете го API линкот преку копчето Уредник.";
+        document.getElementById('user-loading').innerText = "Не може да се вчитаат вежбите. Проверете го API линкот во Уредник.";
       });
   }
 
   function initDefaultProgress() {
-    var now = new Date();
+    var todayISO = getLocalISODate(new Date());
     serverTasks.forEach(function(t) {
-      if (!userProgress[t.id]) {
-        var due = new Date();
-        due.setDate(now.getDate() + (Number(t.preporacan_rok) || 7));
+      var days = Number(t.preporacan_rok) || 7;
+      var p = userProgress[t.id];
+      if (!p || !p.dueDate || p.dueDate.indexOf('NaN') !== -1) {
         userProgress[t.id] = {
-          dueDate: due.toISOString().split('T')[0],
-          practicedCount: 0,
-          lastPracticed: null
+          startDate: todayISO,
+          dueDate: addDaysToISO(todayISO, days),
+          targetDays: days,
+          history: []
         };
+      } else if (!Array.isArray(p.history)) {
+        p.history = [];
       }
     });
     saveLocalProgress();
   }
 
   function saveLocalProgress() {
-    localStorage.setItem('bk_progress', JSON.stringify(userProgress));
+    localStorage.setItem('bk_progress_v2', JSON.stringify(userProgress));
+  }
+
+  function togglePracticeOnDate(taskId, dateISO) {
+    var prog = userProgress[taskId];
+    if (!prog) return;
+    var idx = prog.history.indexOf(dateISO);
+    if (idx === -1) {
+      prog.history.push(dateISO);
+      showToast((appLang === 'mk' ? "✨ Забележано практикување за " : "✨ Zabeleženo praktikovanje za ") + formatPrettyDate(dateISO));
+    } else {
+      prog.history.splice(idx, 1);
+      showToast((appLang === 'mk' ? "↩️ Поништено за " : "↩️ Poništeno za ") + formatPrettyDate(dateISO));
+    }
+    saveLocalProgress();
+    refreshAllUserViews();
   }
 
   function extendTaskDeadline(taskId, extraDays) {
     var prog = userProgress[taskId];
     if (!prog) return;
-    var base = new Date(prog.dueDate);
-    var today = new Date();
-    if (base < today) base = today;
-    base.setDate(base.getDate() + extraDays);
-    prog.dueDate = base.toISOString().split('T')[0];
+    var todayISO = getLocalISODate(new Date());
+    var baseISO = (prog.dueDate && prog.dueDate >= todayISO) ? prog.dueDate : todayISO;
+    prog.dueDate = addDaysToISO(baseISO, extraDays);
+    prog.targetDays = (Number(prog.targetDays) || 7) + Number(extraDays);
     saveLocalProgress();
-    renderUserTasks();
+    showToast((appLang === 'mk' ? "⏳ Рокот е продолжен до " : "⏳ Rok je produžen do ") + formatPrettyDate(prog.dueDate));
+    refreshAllUserViews();
   }
 
-  function markPracticedToday(taskId) {
-    var prog = userProgress[taskId];
-    if (!prog) return;
-    var todayStr = new Date().toISOString().split('T')[0];
-    if (prog.lastPracticed !== todayStr) {
-      prog.practicedCount = (prog.practicedCount || 0) + 1;
-      prog.lastPracticed = todayStr;
-      saveLocalProgress();
-      renderUserTasks();
-    }
+  function resetTaskCycle(taskId, defaultDays) {
+    var todayISO = getLocalISODate(new Date());
+    var d = Number(defaultDays) || 7;
+    userProgress[taskId] = {
+      startDate: todayISO,
+      dueDate: addDaysToISO(todayISO, d),
+      targetDays: d,
+      history: userProgress[taskId] ? userProgress[taskId].history : []
+    };
+    saveLocalProgress();
+    showToast(appLang === 'mk' ? "🔄 Вежбата е повторно активирана!" : "🔄 Vežba je ponovo aktivirana!");
+    refreshAllUserViews();
   }
 
-  function renderUserTasks() {
-    var container = document.getElementById('user-tasks-container');
-    var todayStr = new Date().toISOString().split('T')[0];
+  function refreshAllUserViews() {
+    var todayISO = getLocalISODate(new Date());
+    var activeCount = 0, doneTodayCount = 0, totalCheckins = 0;
 
-    var filtered = serverTasks.filter(function(t) {
-      var prog = userProgress[t.id];
-      if (userTab === 'active') return prog && prog.dueDate >= todayStr;
-      return true;
+    serverTasks.forEach(function(t) {
+      var p = userProgress[t.id];
+      if (!p) return;
+      totalCheckins += p.history.length;
+      if (p.dueDate >= todayISO) {
+        activeCount++;
+        if (p.history.indexOf(todayISO) !== -1) doneTodayCount++;
+      }
     });
 
-    if (userTab === 'calendar') {
-      filtered.sort(function(a, b) {
-        return (userProgress[a.id].dueDate > userProgress[b.id].dueDate) ? 1 : -1;
-      });
-    }
+    document.getElementById('stat-active-count').innerText = activeCount;
+    document.getElementById('stat-today-done').innerText = doneTodayCount + " / " + activeCount;
+    document.getElementById('stat-total-checkins').innerText = totalCheckins;
 
-    if (filtered.length === 0) {
-      container.innerHTML = '<div class="panel-card">Нема активни вежби во оваа категорија.</div>';
+    renderActiveTasksView();
+    renderVisualCalendar();
+    renderArchiveView();
+  }
+
+  function renderActiveTasksView() {
+    var container = document.getElementById('user-tasks-container');
+    var todayISO = getLocalISODate(new Date());
+    var L = I18N[appLang];
+
+    var activeList = serverTasks.filter(function(t) {
+      var p = userProgress[t.id];
+      return p && p.dueDate >= todayISO;
+    });
+
+    if (activeList.length === 0) {
+      container.innerHTML = '<div class="panel-card" style="grid-column: 1 / -1; text-align:center;">' + L.noActive + '</div>';
       return;
     }
 
-    container.innerHTML = filtered.map(function(t) {
+    var last7Days = [];
+    for (var i = 6; i >= 0; i--) {
+      var dISO = addDaysToISO(todayISO, -i);
+      var parts = dISO.split('-');
+      var dt = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+      last7Days.push({ iso: dISO, dayNum: parts[2], label: L.dowSunFirst[dt.getDay()] });
+    }
+
+    container.innerHTML = activeList.map(function(t) {
       var title = (appLang === 'mk') ? t.mk_naslov : t.shb_naslov;
       var body = (appLang === 'mk') ? t.mk_vezba : t.shb_vezba;
-      var prog = userProgress[t.id] || { dueDate: todayStr, practicedCount: 0 };
-      var doneToday = (prog.lastPracticed === todayStr);
+      var prog = userProgress[t.id];
+      var doneToday = prog.history.indexOf(todayISO) !== -1;
+      var remainingDays = Math.max(0, daysBetweenISO(todayISO, prog.dueDate));
+      var target = Number(prog.targetDays) || 7;
+      var pct = Math.min(100, Math.round((prog.history.length / target) * 100));
 
-      var lblUntil = (appLang === 'mk') ? "Активна до: " : "Aktivna do: ";
-      var btnPractice = doneToday
-        ? ((appLang === 'mk') ? "✨ Практикувано денес (" + prog.practicedCount + ")" : "✨ Praktikovano danas (" + prog.practicedCount + ")")
-        : ((appLang === 'mk') ? "✅ Практикував денес" : "✅ Praktikovao/la sam danas");
-      var btnExtend = (appLang === 'mk') ? "⏳ +7 дена" : "⏳ +7 dana";
+      var dotsHtml = last7Days.map(function(dObj) {
+        var isDone = prog.history.indexOf(dObj.iso) !== -1;
+        var isToday = (dObj.iso === todayISO);
+        return '<div class="day-dot ' + (isDone ? 'practiced' : '') + ' ' + (isToday ? 'is-today' : '') + '" onclick="togglePracticeOnDate(\'' + t.id + '\', \'' + dObj.iso + '\')">' +
+          '<div>' + dObj.label + '</div><div>' + (isDone ? '✓' : dObj.dayNum) + '</div>' +
+        '</div>';
+      }).join("");
 
-      return '<div class="task-card">' +
+      var lblUntil = L.untilPrefix + formatPrettyDate(prog.dueDate) + L.remPrefix + remainingDays + " " + L.daysWord + ")";
+
+      return '<div class="task-card ' + (doneToday ? 'done-today' : '') + '">' +
         '<div>' +
           '<div class="task-meta">' +
-            '<span class="murli-badge">📅 Мурли: ' + t.murli_datum + '</span>' +
-            '<span>' + lblUntil + '<b>' + prog.dueDate + '</b></span>' +
+            '<span class="murli-badge">📅 ' + t.murli_datum + '</span>' +
+            '<span class="deadline-badge ' + (target > 7 ? 'extended' : '') + '">' + lblUntil + '</span>' +
           '</div>' +
           '<h3 class="task-title">' + title + '</h3>' +
           '<div class="task-body">' + body + '</div>' +
         '</div>' +
-        '<div class="task-footer">' +
-          '<button class="btn ' + (doneToday ? 'btn-success' : 'btn-primary') + ' btn-sm" onclick="markPracticedToday(\'' + t.id + '\')">' + btnPractice + '</button>' +
-          '<button class="btn btn-sm" onclick="extendTaskDeadline(\'' + t.id + '\', 7)">' + btnExtend + '</button>' +
+        '<div>' +
+          '<div class="progress-section">' +
+            '<div class="progress-header">' +
+              '<span>' + L.progLabel + '</span>' +
+              '<span>' + prog.history.length + ' / ' + target + ' ' + L.daysWord + ' (' + pct + '%)</span>' +
+            '</div>' +
+            '<div class="progress-bar-bg"><div class="progress-bar-fill" style="width:' + pct + '%;"></div></div>' +
+            '<div class="week-dots">' + dotsHtml + '</div>' +
+          '</div>' +
+          '<div class="task-footer">' +
+            '<button class="btn ' + (doneToday ? 'btn-success' : 'btn-primary') + '" style="flex:1; justify-content:center;" onclick="togglePracticeOnDate(\'' + t.id + '\', \'' + todayISO + '\')">' + (doneToday ? L.doneBtn : L.todoBtn) + '</button>' +
+            '<button class="btn" onclick="extendTaskDeadline(\'' + t.id + '\', 7)">' + L.extendBtn + '</button>' +
+          '</div>' +
         '</div>' +
+      '</div>';
+    }).join("");
+  }
+
+  function changeCalendarMonth(delta) {
+    calMonth += delta;
+    if (calMonth < 0) { calMonth = 11; calYear--; }
+    else if (calMonth > 11) { calMonth = 0; calYear++; }
+    renderVisualCalendar();
+  }
+
+  function selectCalendarDate(isoDate) {
+    selectedCalDate = isoDate;
+    renderVisualCalendar();
+  }
+
+  function renderVisualCalendar() {
+    var L = I18N[appLang];
+    document.getElementById('cal-month-label').innerText = L.months[calMonth] + " " + calYear;
+    document.getElementById('cal-days-header').innerHTML = L.dowShort.map(function(d) {
+      return '<div class="cal-dow">' + d + '</div>';
+    }).join("");
+
+    var firstDay = new Date(calYear, calMonth, 1);
+    var daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+    var startOffset = (firstDay.getDay() + 6) % 7;
+    var todayISO = getLocalISODate(new Date());
+    var cellsHtml = "";
+
+    for (var b = 0; b < startOffset; b++) {
+      cellsHtml += '<div class="cal-cell empty"></div>';
+    }
+
+    for (var day = 1; day <= daysInMonth; day++) {
+      var dateISO = calYear + "-" + String(calMonth + 1).padStart(2, '0') + "-" + String(day).padStart(2, '0');
+      var isToday = (dateISO === todayISO);
+      var isSelected = (dateISO === selectedCalDate);
+      var practicedOnDay = 0, activeOnDay = 0;
+
+      serverTasks.forEach(function(t) {
+        var p = userProgress[t.id];
+        if (!p) return;
+        if (p.history.indexOf(dateISO) !== -1) practicedOnDay++;
+        if (dateISO >= (p.startDate || todayISO) && dateISO <= p.dueDate) activeOnDay++;
+      });
+
+      var dots = "";
+      for (var d = 0; d < practicedOnDay; d++) dots += '<span class="ind-dot-done"></span>';
+
+      cellsHtml += '<div class="cal-cell ' + (isToday ? 'today' : '') + ' ' + (isSelected ? 'selected' : '') + '" onclick="selectCalendarDate(\'' + dateISO + '\')">' +
+        '<div class="cal-day-num">' + day + '</div>' +
+        '<div>' +
+          '<div class="cal-indicators" style="margin-bottom:3px;">' + dots + '</div>' +
+          (activeOnDay > 0 ? '<div class="ind-bar-active"></div>' : '') +
+        '</div>' +
+      '</div>';
+    }
+
+    document.getElementById('cal-grid-cells').innerHTML = cellsHtml;
+    renderSelectedDayPanel();
+  }
+
+  // ФИЛТРИРАН ПРЕГЛЕД САМО ЗА ВЕЖБИТЕ ШТО ПРИПАЃААТ НА ИЗБРАНИОТ ДАТУМ ВО КАЛЕНДАРОТ
+  function renderSelectedDayPanel() {
+    var L = I18N[appLang];
+    var todayISO = getLocalISODate(new Date());
+    document.getElementById('cal-selected-date-title').innerText = L.calDateTitle + formatPrettyDate(selectedCalDate);
+    var listEl = document.getElementById('cal-day-tasks-list');
+
+    var tasksForDay = serverTasks.filter(function(t) {
+      var p = userProgress[t.id];
+      if (!p) return false;
+      var inActiveWindow = (selectedCalDate >= (p.startDate || todayISO) && selectedCalDate <= p.dueDate);
+      var wasPracticed = (p.history.indexOf(selectedCalDate) !== -1);
+      return inActiveWindow || wasPracticed;
+    });
+
+    if (tasksForDay.length === 0) {
+      listEl.innerHTML = '<p style="color:var(--muted); font-size:13.5px;">' + L.noTasksOnDate + '</p>';
+      return;
+    }
+
+    listEl.innerHTML = tasksForDay.map(function(t) {
+      var p = userProgress[t.id];
+      var doneOnSelected = p && p.history.indexOf(selectedCalDate) !== -1;
+      var title = (appLang === 'mk') ? t.mk_naslov : t.shb_naslov;
+
+      return '<div style="background:var(--card-alt); border:1px solid var(--border); border-radius:10px; padding:12px; margin-bottom:10px;">' +
+        '<div style="font-size:12px; color:var(--muted); margin-bottom:4px;">📅 ' + t.murli_datum + ' • ' + L.untilPrefix + formatPrettyDate(p.dueDate) + '</div>' +
+        '<div style="font-weight:700; margin-bottom:10px;">' + title + '</div>' +
+        '<div style="display:flex; gap:8px; flex-wrap:wrap;">' +
+          '<button class="btn btn-sm ' + (doneOnSelected ? 'btn-success' : 'btn-primary') + '" onclick="togglePracticeOnDate(\'' + t.id + '\', \'' + selectedCalDate + '\')">' +
+            (doneOnSelected ? L.doneOnDay : L.markOnDay) +
+          '</button>' +
+          '<button class="btn btn-sm" onclick="extendTaskDeadline(\'' + t.id + '\', 7)">' + L.extendBtn + '</button>' +
+        '</div>' +
+      '</div>';
+    }).join("");
+  }
+
+  function renderArchiveView() {
+    var L = I18N[appLang];
+    var container = document.getElementById('archive-container');
+    if (serverTasks.length === 0) {
+      container.innerHTML = '<div class="panel-card">' + L.archiveEmpty + '</div>';
+      return;
+    }
+
+    var groups = {};
+    serverTasks.forEach(function(t) {
+      var key = t.murli_datum || "—";
+      if (!groups[key]) groups[key] = [];
+      groups[key].push(t);
+    });
+
+    container.innerHTML = Object.keys(groups).map(function(mDate) {
+      var list = groups[mDate];
+      var itemsHtml = list.map(function(t) {
+        var title = (appLang === 'mk') ? t.mk_naslov : t.shb_naslov;
+        var body = (appLang === 'mk') ? t.mk_vezba : t.shb_vezba;
+        var p = userProgress[t.id];
+
+        return '<div style="background:var(--card-alt); border:1px solid var(--border); border-radius:12px; padding:14px; margin-bottom:10px;">' +
+          '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; flex-wrap:wrap; gap:6px;">' +
+            '<strong style="font-size:16px; color:var(--primary);">' + title + '</strong>' +
+            '<span style="font-size:12px; color:var(--muted);">' + L.totalPracticed + '<b>' + (p ? p.history.length : 0) + '</b>' + L.timesWord + formatPrettyDate(p ? p.dueDate : '') + '</span>' +
+          '</div>' +
+          '<div style="font-size:13.5px; line-height:1.6; white-space:pre-line; margin-bottom:12px;">' + body + '</div>' +
+          '<div style="display:flex; gap:8px; flex-wrap:wrap;">' +
+            '<button class="btn btn-sm btn-primary" onclick="resetTaskCycle(\'' + t.id + '\', ' + (t.preporacan_rok || 7) + ')">' + L.reactivateBtn + '</button>' +
+            '<button class="btn btn-sm" onclick="extendTaskDeadline(\'' + t.id + '\', 7)">' + L.extendBtn + '</button>' +
+          '</div>' +
+        '</div>';
+      }).join("");
+
+      return '<div class="archive-group">' +
+        '<div class="archive-header">' +
+          '<strong style="font-size:16px;">' + L.archiveGroupTitle + mDate + '</strong>' +
+          '<span class="murli-badge">' + list.length + L.tasksCountWord + '</span>' +
+        '</div>' +
+        itemsHtml +
       '</div>';
     }).join("");
   }
@@ -516,7 +937,11 @@
     document.getElementById('tab-active').className = (tab === 'active') ? 'nav-tab active' : 'nav-tab';
     document.getElementById('tab-calendar').className = (tab === 'calendar') ? 'nav-tab active' : 'nav-tab';
     document.getElementById('tab-all').className = (tab === 'all') ? 'nav-tab active' : 'nav-tab';
-    renderUserTasks();
+
+    document.getElementById('view-tab-active').className = (tab === 'active') ? '' : 'hidden';
+    document.getElementById('view-tab-calendar').className = (tab === 'calendar') ? '' : 'hidden';
+    document.getElementById('view-tab-archive').className = (tab === 'all') ? '' : 'hidden';
+    refreshAllUserViews();
   }
 
   function switchAppLang(lang) {
@@ -525,27 +950,27 @@
     document.getElementById('lang-mk').className = (lang === 'mk') ? 'btn active' : 'btn';
     document.getElementById('lang-shb').className = (lang === 'shb') ? 'btn active' : 'btn';
 
-    if (lang === 'mk') {
-      document.getElementById('app-main-title').innerText = "Авијакт Мурли Практики";
-      document.getElementById('app-subtitle').innerText = "Ом Шанти • Календар на духовни вежби од БапДада";
-      document.getElementById('tab-active').innerText = "🔥 Активни денес";
-      document.getElementById('tab-calendar').innerText = "📅 Мој Календар на рокови";
-      document.getElementById('tab-all').innerText = "📚 Архива на сите Мурли";
-    } else {
-      document.getElementById('app-main-title').innerText = "Avijakt Murli Prakse";
-      document.getElementById('app-subtitle').innerText = "Om Šanti • Kalendar duhovnih vežbi od BapDade";
-      document.getElementById('tab-active').innerText = "🔥 Aktivne danas";
-      document.getElementById('tab-calendar').innerText = "📅 Moj Kalendar rokova";
-      document.getElementById('tab-all').innerText = "📚 Arhiva svih Murlija";
-    }
+    var L = I18N[lang];
+    document.getElementById('app-main-title').innerText = L.mainTitle;
+    document.getElementById('app-subtitle').innerText = L.subTitle;
+    document.getElementById('tab-active').innerText = L.tabActive;
+    document.getElementById('tab-calendar').innerText = L.tabCal;
+    document.getElementById('tab-all').innerText = L.tabAll;
+    document.getElementById('lbl-stat-active').innerText = L.statActive;
+    document.getElementById('lbl-stat-today').innerText = L.statToday;
+    document.getElementById('lbl-stat-total').innerText = L.statTotal;
+    document.getElementById('btn-cal-prev').innerText = L.prevBtn;
+    document.getElementById('btn-cal-next').innerText = L.nextBtn;
+    document.getElementById('cal-legend-done').innerText = L.legendDone;
+    document.getElementById('cal-legend-active').innerText = L.legendActive;
+
     setReaderLang(lang);
-    renderUserTasks();
+    refreshAllUserViews();
   }
 
   function toggleTheme() {
     var html = document.documentElement;
-    var current = html.getAttribute('data-theme');
-    var next = (current === 'dark') ? 'light' : 'dark';
+    var next = (html.getAttribute('data-theme') === 'dark') ? 'light' : 'dark';
     html.setAttribute('data-theme', next);
     localStorage.setItem('bk_theme', next);
     document.getElementById('btn-theme').innerText = (next === 'dark') ? '☀️ Светла' : '🌙 Темна';
@@ -566,6 +991,7 @@
     }
   }
 
+  // ЛЕБДЕЧКО МЕНИ ВО УРЕДНИКОТ
   document.addEventListener('mouseup', function(e) {
     var menu = document.getElementById('floating-selection-menu');
     var reader = document.getElementById('murli-paragraphs-container');
@@ -632,9 +1058,7 @@
   function toggleGlossary() {
     var p = document.getElementById('glossary-panel');
     p.classList.toggle('hidden');
-    if (!p.classList.contains('hidden')) {
-      callBackend('getGlossary', {}, renderGlossary);
-    }
+    if (!p.classList.contains('hidden')) callBackend('getGlossary', {}, renderGlossary);
   }
 
   function renderGlossary(list) {
@@ -690,7 +1114,7 @@
     var box = document.getElementById('generated-prompt-box');
     box.select();
     document.execCommand('copy');
-    alert("✅ Промптот е копиран!");
+    showToast("✅ Промптот е копиран!");
   }
 
   function loadPastedJson() {
@@ -786,9 +1210,11 @@
     var btn = document.getElementById('btn-approve');
     btn.disabled = true;
 
+    var origEn = (item.para_index >= 0 && allParagraphs[item.para_index]) ? allParagraphs[item.para_index].en : "";
+
     var payload = {
       murliDate: document.getElementById('murli-date').value.trim(),
-      originalen_pasus: "",
+      originalen_pasus: origEn,
       mk_naslov: item.mk_naslov,
       mk_vezba: item.mk_vezba,
       shb_naslov: item.shb_naslov,
@@ -800,8 +1226,8 @@
       btn.disabled = false;
       item._saved = true;
       renderTaskPills();
+      showToast("🎉 Вежбата е зачувана во базата!");
       if (currentIndex + 1 < extractedTasks.length) selectTask(currentIndex + 1);
-      else alert("🎉 Вежбата е зачувана во базата и веднаш е достапна во корисничкиот дел!");
     });
   }
 
